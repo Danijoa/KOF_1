@@ -1,0 +1,43 @@
+﻿  Kimkaphwan_2P.cpp
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.h(53,35): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\CommonFunction.h(86,15): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(249,35): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(306,45): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(312,58): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(322,36): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(322,29): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(325,33): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(325,26): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(328,32): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(328,25): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(331,33): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(331,26): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(334,33): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(334,26): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(337,33): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(337,26): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(340,33): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(340,26): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(343,33): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(343,26): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(346,32): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(346,25): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(355,40): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(355,33): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(358,37): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(358,30): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(361,36): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(361,29): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(364,37): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(364,30): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(367,37): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(367,30): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(370,37): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(370,30): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(373,37): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(373,30): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(376,37): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(376,30): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(379,36): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Kimkaphwan_2P.cpp(379,29): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  210329.vcxproj -> C:\Users\ASUS S530FN\Desktop\210329\x64\Debug\210329.exe

@@ -1,0 +1,12 @@
+﻿  MainGame.cpp
+C:\Users\ASUS S530FN\Desktop\210329\210329\MainGame.cpp(109,24): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\MainGame.cpp(110,24): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\MainGame.cpp(111,38): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Missile.cpp
+C:\Users\ASUS S530FN\Desktop\210329\210329\Missile.cpp(33,21): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Missile.cpp(34,20): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Missile.cpp(35,22): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Missile.cpp(36,23): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\ASUS S530FN\Desktop\210329\210329\Missile.cpp(80,19): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  코드를 생성하고 있습니다...
+  210329.vcxproj -> C:\Users\ASUS S530FN\Desktop\210329\Debug\210329.exe
