@@ -9,7 +9,7 @@ HRESULT Kyo_2P::Init()
 
 	name = "KYO";
 	pos.x = WINSIZE_X - 700;
-	pos.y = 300;
+	pos.y = 100;
 	hp = 100;
 
 	characterFrame = 10;
@@ -19,68 +19,89 @@ HRESULT Kyo_2P::Init()
 
 	kyoState = State::STAND;
 
+	imageSizeY = 190 * 3;
+	imageSize[(int)State::STAND] = 750 * 3 / 10;
 	kyo_stand = new Image();
-	if (FAILED(kyo_stand->Init("Image/kyo_stand.bmp", 750 * 2, 190 * 2, 10, 1, true, RGB(255, 255, 255))))
+	if (FAILED(kyo_stand->Init("Image/kyo_stand.bmp", 750 * 3, imageSizeY, 10, 1, true, RGB(255, 255, 255))))
 	{
 		MessageBox(g_hWnd, "stand 로드 실패", "경고", MB_OK);
 		return E_FAIL;
 	}
 
+	imageSize[(int)State::FRONT] = 460 * 3 / 5;
 	kyo_walkFront = new Image();
-	if (FAILED(kyo_walkFront->Init("Image/kyo_walkfront.bmp", 460 * 2, 190 * 2, 5, 1, true, RGB(255, 255, 255))))
+	if (FAILED(kyo_walkFront->Init("Image/kyo_walkfront.bmp", 460 * 3, imageSizeY, 5, 1, true, RGB(255, 255, 255))))
 	{
 		MessageBox(g_hWnd, "앞으로 걷기 로드 실패", "경고", MB_OK);
 		return E_FAIL;
 	}
 
+	imageSize[(int)State::BACK] = 522 * 3 / 6;
 	kyo_walkBack = new Image();
-	if (FAILED(kyo_walkBack->Init("Image/kyo_walkback.bmp", 522 * 2, 190 * 2, 6, 1, true, RGB(255, 255, 255))))
+	if (FAILED(kyo_walkBack->Init("Image/kyo_walkback.bmp", 522 * 3, imageSizeY, 6, 1, true, RGB(255, 255, 255))))
 	{
 		MessageBox(g_hWnd, "뒤고 걷기 로드 실패", "경고", MB_OK);
 		return E_FAIL;
 	}
 
+	imageSize[(int)State::SHAND] = 952 * 3 / 7;
 	kyo_gangson = new Image();
-	if (FAILED(kyo_gangson->Init("Image/kyo_gangson.bmp", 952 * 2, 190 * 2, 7, 1, true, RGB(255, 255, 255))))
+	if (FAILED(kyo_gangson->Init("Image/kyo_gangson.bmp", 952 * 3, imageSizeY, 7, 1, true, RGB(255, 255, 255))))
 	{
 		MessageBox(g_hWnd, "강손 로드 실패", "경고", MB_OK);
 		return E_FAIL;
 	}
 
+	imageSize[(int)State::SFOOT] = 1593 * 3 / 9;
 	kyo_gangbal = new Image();
-	if (FAILED(kyo_gangbal->Init("Image/kyo_gangbal.bmp", 1593 * 2, 190 * 2, 9, 1, true, RGB(255, 255, 255))))
+	if (FAILED(kyo_gangbal->Init("Image/kyo_gangbal.bmp", 1593 * 3, imageSizeY, 9, 1, true, RGB(255, 255, 255))))
 	{
 		MessageBox(g_hWnd, "강발 로드 실패", "경고", MB_OK);
 		return E_FAIL;
 	}
 
+	imageSize[(int)State::COMBO] = 2420 * 3 / 20;
 	kyo_combo = new Image();
-	if (FAILED(kyo_combo->Init("Image/kyo_combo_motion.bmp", 2420 * 2, 190 * 2, 19, 1, true, RGB(255, 255, 255))))
+	if (FAILED(kyo_combo->Init("Image/kyo_combo_motion.bmp", 2420 * 3, imageSizeY, 20, 1, true, RGB(255, 255, 255))))
 	{
 		MessageBox(g_hWnd, "콤보 로드 실패", "경고", MB_OK);
 		return E_FAIL;
 	}
 
+	imageSize[(int)State::WHAND] = 630 * 3 / 5;
 	kyo_yakson = new Image();
-	if (FAILED(kyo_yakson->Init("Image/kyo_yakson.bmp", 630 * 2, 190 * 2, 5, 1, true, RGB(255, 255, 255))))
+	if (FAILED(kyo_yakson->Init("Image/kyo_yakson.bmp", 630 * 3, imageSizeY, 5, 1, true, RGB(255, 255, 255))))
 	{
 		MessageBox(g_hWnd, "약손 로드 실패", "경고", MB_OK);
 		return E_FAIL;
 	}
 
+	imageSize[(int)State::WFOOT] = 1113 * 3 / 7;
 	kyo_yakbal = new Image();
-	if (FAILED(kyo_yakbal->Init("Image/kyo_yakbal.bmp", 1113 * 2, 190 * 2, 7, 1, true, RGB(255, 255, 255))))
+	if (FAILED(kyo_yakbal->Init("Image/kyo_yakbal.bmp", 1113 * 3, imageSizeY, 7, 1, true, RGB(255, 255, 255))))
 	{
 		MessageBox(g_hWnd, "약발 로드 실패", "경고", MB_OK);
 		return E_FAIL;
 	}
 
+	imageSize[(int)State::DOWN] = 3189 * 3 / 17;
 	kyo_hitted = new Image();
-	if (FAILED(kyo_hitted->Init("Image/kyo_hitted.bmp", 3189 * 2, 190 * 2, 17, 1, true, RGB(255, 255, 255))))
+	if (FAILED(kyo_hitted->Init("Image/kyo_hitted.bmp", 3189 * 3, imageSizeY, 17, 1, true, RGB(255, 255, 255))))
 	{
-		MessageBox(g_hWnd, "콤보 로드 실패", "경고", MB_OK);
+		MessageBox(g_hWnd, "힛 로드 실패", "경고", MB_OK);
 		return E_FAIL;
 	}
+
+	rcHit_Size.x = imageSize[(int)State::STAND] * 0.75;														// 초록색 hit 네모의 (x)가로 크기
+	rcHit_Size.y = imageSizeY * 0.5;																		// 초록색 hit 네모의 (y)세로 크기
+	rcHIT_pos.x = 0;
+	rcHIT_pos.y = 0;
+	rcHit = { (LONG)rcHIT_pos.x, (LONG)rcHIT_pos.y, (LONG)rcHit_Size.x, (LONG)rcHit_Size.y };				// 시작x, 시작y, 가로크기, 세로크기
+	rcAttack_Size.x = 0;																					// 빨간색 attack 네모의 (x)가로 크기
+	rcAttack_Size.y = 0;																					// 빨간색 attack 네모의 (y)세로 크기
+	rcAttack_pos.x = pos.x;
+	rcAttack_pos.y = pos.y;
+	rcAttack = { (LONG)rcAttack_pos.x, (LONG)rcAttack_pos.y, (LONG)rcAttack_Size.x, (LONG)rcAttack_Size.y };
 
 	canInput = true;
 	comboStore = new int[3];
@@ -189,7 +210,7 @@ void Kyo_2P::Motion2P()
 	{
 		canInput = false;
 		kyoState = State::COMBO;
-		characterFrame = 19 + 1;
+		characterFrame = 20 + 1;
 		frameCount = 0;
 		checkCombo = false;
 	}
@@ -221,6 +242,175 @@ void Kyo_2P::Motion2P()
 	}
 }
 
+void Kyo_2P::CollisionRect()
+{
+	//콤보
+	if (kyoState == State::COMBO)
+	{
+		if (frameCount == 5 || frameCount == 6 || frameCount == 7)
+		{
+			if (kyo_SidePosition == 1)
+			{
+				if (frameCount == 5)
+				{
+					rcAttack_pos.x = pos.x + 200;
+					rcAttack_pos.y = pos.y + 300;
+				}
+				if (frameCount == 6)
+				{
+					rcAttack_pos.x = pos.x + 250;
+					rcAttack_pos.y = pos.y + 150;
+				}
+				if (frameCount == 7)
+				{
+					rcAttack_pos.x = pos.x + 100;
+					rcAttack_pos.y = pos.y + 100;
+				}
+			}
+			if (kyo_SidePosition == 2)
+			{
+				if (frameCount == 5)
+				{
+					rcAttack_pos.x = pos.x - 50;
+					rcAttack_pos.y = pos.y + 350;
+				}
+				if (frameCount == 6)
+				{
+					rcAttack_pos.x = pos.x - 100;
+					rcAttack_pos.y = pos.y + 180;
+				}
+				if (frameCount == 7)
+				{
+					rcAttack_pos.x = pos.x + 20;
+					rcAttack_pos.y = pos.y + 100;
+				}
+			}
+			rcAttack_Size.x = 55;
+			rcAttack_Size.y = 55;
+		}
+		else if (frameCount >= 8 && frameCount <= 14)
+		{
+			if (kyo_SidePosition == 1)
+			{
+				rcAttack_pos.x = pos.x + 200;
+				rcAttack_pos.y = pos.y + 170;
+			}
+			if (kyo_SidePosition == 2)
+			{
+				rcAttack_pos.x = pos.x - 140;
+				rcAttack_pos.y = pos.y + 160;
+			}
+			rcAttack_Size.x = 100 + 7 * (frameCount - 8);
+			rcAttack_Size.y = 100 + 7 * (frameCount - 8);
+		}
+		else
+		{
+			rcAttack_Size.x = 0;
+			rcAttack_Size.y = 0;
+		}
+	}
+
+	//강손
+	if (kyoState == State::SHAND)
+	{
+		if (frameCount >= 2 && frameCount <= 4)
+		{
+			if (kyo_SidePosition == 1)
+			{
+				rcAttack_pos.x = pos.x + 310;
+				rcAttack_pos.y = pos.y + 220;
+			}
+			if (kyo_SidePosition == 2)
+			{
+				rcAttack_pos.x = pos.x - 135;
+				rcAttack_pos.y = pos.y + 210;
+			}
+			rcAttack_Size.x = 55;
+			rcAttack_Size.y = 55;
+		}
+		else
+		{
+			rcAttack_Size.x = 0;
+			rcAttack_Size.y = 0;
+		}
+	}
+
+	//강발
+	if (kyoState == State::SFOOT)
+	{
+		if (frameCount >= 2 && frameCount <= 4)
+		{
+			if (kyo_SidePosition == 1)
+			{
+				rcAttack_pos.x = pos.x + 270;
+				rcAttack_pos.y = pos.y + 235;
+			}
+			if (kyo_SidePosition == 2)
+			{
+				rcAttack_pos.x = pos.x - 180;
+				rcAttack_pos.y = pos.y + 235;
+			}
+			rcAttack_Size.x = 55 * 3;
+			rcAttack_Size.y = 55;
+		}
+		else
+		{
+			rcAttack_Size.x = 0;
+			rcAttack_Size.y = 0;
+		}
+	}
+
+	//약손
+	if (kyoState == State::WHAND)
+	{
+		if (frameCount >= 1 && frameCount <= 3)
+		{
+			if (kyo_SidePosition == 1)
+			{
+				rcAttack_pos.x = pos.x + 270;
+				rcAttack_pos.y = pos.y + 190;
+			}
+			if (kyo_SidePosition == 2)
+			{
+				rcAttack_pos.x = pos.x - 110;
+				rcAttack_pos.y = pos.y + 190;
+			}
+			rcAttack_Size.x = 55;
+			rcAttack_Size.y = 55;
+		}
+		else
+		{
+			rcAttack_Size.x = 0;
+			rcAttack_Size.y = 0;
+		}
+	}
+
+	//약발
+	if (kyoState == State::WFOOT)
+	{
+		if (frameCount >= 2 && frameCount <= 4)
+		{
+			if (kyo_SidePosition == 1)
+			{
+				rcAttack_pos.x = pos.x + 330;
+				rcAttack_pos.y = pos.y + 370;
+			}
+			if (kyo_SidePosition == 2)
+			{
+				rcAttack_pos.x = pos.x - 170;
+				rcAttack_pos.y = pos.y + 370;
+			}
+			rcAttack_Size.x = 55;
+			rcAttack_Size.y = 55;
+		}
+		else
+		{
+			rcAttack_Size.x = 0;	//공격 모션 끝나면 네모도 사라지게
+			rcAttack_Size.y = 0;
+		}
+	}
+}
+
 void Kyo_2P::FrameCheck()
 {
 	elapsedTime++;
@@ -233,7 +423,15 @@ void Kyo_2P::FrameCheck()
 
 void Kyo_2P::Update()
 {
-	//적이랑 위치 바뀌면 kyo_SidePosition도 변경 해 주자
+	//hit 네모
+	rcHIT_pos.x = pos.x + 20;
+	rcHIT_pos.y = pos.y + 180;
+	rcHit = { (LONG)rcHIT_pos.x, (LONG)rcHIT_pos.y, (LONG)rcHit_Size.x, (LONG)rcHit_Size.y };		// 시작x, 시작y, 가로크기, 세로크기
+	rcHit_temp = { (LONG)rcHIT_pos.x, (LONG)rcHIT_pos.y, (LONG)rcHit_Size.x + (LONG)rcHIT_pos.x, (LONG)rcHit_Size.y + (LONG)rcHIT_pos.y };
+
+	//attack 네모
+	rcAttack = { (LONG)rcAttack_pos.x, (LONG)rcAttack_pos.y, (LONG)rcAttack_Size.x, (LONG)rcAttack_Size.y };
+	rcAttack_temp = { (LONG)rcAttack_pos.x, (LONG)rcAttack_pos.y, (LONG)rcAttack_Size.x + (LONG)rcAttack_pos.x, (LONG)rcAttack_Size.y + (LONG)rcAttack_pos.y };
 
 	//스킬 저장 벡터
 	elapsedTime2++;
@@ -288,6 +486,7 @@ void Kyo_2P::Update()
 		|| kyoState == State::WFOOT || kyoState == State::WHAND))
 	{
 		FrameCheck();
+		CollisionRect();
 
 		if (frameCount + 1 == characterFrame)
 		{
@@ -317,6 +516,12 @@ void Kyo_2P::Render(HDC hdc)
 		}
 	}
 
+	//hit 네모
+	RenderRect(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+
+	//attack 네모
+	RenderRect(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
+
 	//모션 렌더
 	if (kyo_SidePosition == 1)
 	{
@@ -326,32 +531,32 @@ void Kyo_2P::Render(HDC hdc)
 			kyo_stand->Render(hdc, pos.x, pos.y, frameCount);
 			break;
 		case State::FRONT:
-			kyo_walkFront->Render(hdc, pos.x, pos.y, frameCount);
+			kyo_walkFront->Render(hdc, pos.x - 20, pos.y, frameCount);
 			break;
 		case State::BACK:
-			kyo_walkBack->Render(hdc, pos.x, pos.y, frameCount);
+			kyo_walkBack->Render(hdc, pos.x - 10, pos.y, frameCount);
 			break;
 		case State::SHAND:
-			kyo_gangson->Render(hdc, pos.x, pos.y, frameCount);
+			kyo_gangson->Render(hdc, pos.x - 15, pos.y, frameCount);
 			break;
 		case State::SFOOT:
-			kyo_gangbal->Render(hdc, pos.x, pos.y, frameCount);
+			kyo_gangbal->Render(hdc, pos.x - 70, pos.y, frameCount);
 			break;
 		case State::COMBO:
 			kyo_combo->Render(hdc, pos.x, pos.y, frameCount);
 			break;
 		case State::WHAND:
-			kyo_yakson->Render(hdc, pos.x, pos.y, frameCount);
+			kyo_yakson->Render(hdc, pos.x - 30, pos.y, frameCount);
 			break;
 		case State::WFOOT:
-			kyo_yakbal->Render(hdc, pos.x, pos.y, frameCount);
+			kyo_yakbal->Render(hdc, pos.x - 80, pos.y, frameCount);
 			break;
 		case State::DOWN:
 			kyo_hitted->Render(hdc, pos.x, pos.y, frameCount);
 			break;
 		}
 	}
-	else if (kyo_SidePosition == 2)
+	else if (kyo_SidePosition == 2)	
 	{
 		switch (kyoState)
 		{
@@ -365,19 +570,19 @@ void Kyo_2P::Render(HDC hdc)
 			kyo_walkBack->RenderFlip(hdc, pos.x, pos.y, frameCount);
 			break;
 		case State::SHAND:
-			kyo_gangson->RenderFlip(hdc, pos.x, pos.y, frameCount);
+			kyo_gangson->RenderFlip(hdc, pos.x - 160, pos.y, frameCount);
 			break;
 		case State::SFOOT:
-			kyo_gangbal->RenderFlip(hdc, pos.x, pos.y, frameCount);
+			kyo_gangbal->RenderFlip(hdc, pos.x - 220, pos.y, frameCount);
 			break;
 		case State::COMBO:
-			kyo_combo->RenderFlip(hdc, pos.x, pos.y, frameCount);
+			kyo_combo->RenderFlip(hdc, pos.x - 170, pos.y, frameCount);
 			break;
 		case State::WHAND:
-			kyo_yakson->RenderFlip(hdc, pos.x, pos.y, frameCount);
+			kyo_yakson->RenderFlip(hdc, pos.x - 130, pos.y, frameCount);
 			break;
 		case State::WFOOT:
-			kyo_yakbal->RenderFlip(hdc, pos.x, pos.y, frameCount);
+			kyo_yakbal->RenderFlip(hdc, pos.x - 180, pos.y, frameCount);
 			break;
 		case State::DOWN:
 			kyo_hitted->RenderFlip(hdc, pos.x, pos.y, frameCount);

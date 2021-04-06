@@ -9,8 +9,8 @@ HRESULT Iori_2P::Init()
 	iori_SidePosition = 2;
 
 	name = "Iori";
-	pos.x = WINSIZE_X-700;
-	pos.y = 300;
+	pos.x = 800;
+	pos.y = 250;
 	hp = 100;
 
 	chracterFrame = 7;
@@ -213,6 +213,7 @@ void Iori_2P::Motion2P()
 			frameCount = 0;
 		}
 	}
+
 }
 
 void Iori_2P::FrameCheck()
@@ -295,6 +296,9 @@ void Iori_2P::Update()
 	{
 		FrameCheck();
 	}
+	///////////// 추가 부분 - 충돌 /////////////////
+	Iori_Set_HitBox(frameCount);
+	Iori_Set_AttackBox(frameCount);
 }
 
 void Iori_2P::Render(HDC hdc)
@@ -316,46 +320,61 @@ void Iori_2P::Render(HDC hdc)
 	{
 		if (ioriState == Chractor_STATE::FRONT)
 		{
+			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
 			img[0].Render(hdc, pos.x, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::BACK)
 		{
+			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
 			img[1].Render(hdc, pos.x, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::STAND)
 		{
+			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
 			img[2].Render(hdc, pos.x, pos.y, frameCount);
+
 		}
 
 		if (ioriState == Chractor_STATE::WHAND)
 		{
+			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
 			img[3].Render(hdc, pos.x, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::SHAND)
 		{
+			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
 			img[4].Render(hdc, pos.x, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::WFOOT)
 		{
+			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
 			img[5].Render(hdc, pos.x, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::SFOOT)
 		{
+			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
 			img[6].Render(hdc, pos.x, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::COMBO)
 		{
+			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
 			img[7].Render(hdc, pos.x, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::DOWN)
 		{
+			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
 			img[8].Render(hdc, pos.x, pos.y, frameCount);
 		}
 	}
@@ -364,47 +383,61 @@ void Iori_2P::Render(HDC hdc)
 	{
 		if (ioriState == Chractor_STATE::FRONT)
 		{
-			img[0].RenderFlip(hdc, pos.x, pos.y, frameCount);
+			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			img[0].RenderFlip(hdc, pos.x - img[0].GetImageInfo()->frameWidth + 280, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::BACK)
 		{
-			img[1].RenderFlip(hdc, pos.x, pos.y, frameCount);
+			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			img[1].RenderFlip(hdc, pos.x - img[1].GetImageInfo()->frameWidth + 280, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::STAND)
 		{
-			img[2].RenderFlip(hdc, pos.x, pos.y, frameCount);
+			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			img[2].RenderFlip(hdc, pos.x - img[2].GetImageInfo()->frameWidth + 280, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::WHAND)
 		{
-			img[3].RenderFlip(hdc, pos.x, pos.y, frameCount);
+			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
+			img[3].RenderFlip(hdc, pos.x - img[3].GetImageInfo()->frameWidth, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::SHAND)
 		{
-			img[4].RenderFlip(hdc, pos.x, pos.y, frameCount);
+			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
+			img[4].RenderFlip(hdc, pos.x - img[4].GetImageInfo()->frameWidth, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::WFOOT)
 		{
-			img[5].RenderFlip(hdc, pos.x, pos.y, frameCount);
+			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
+			img[5].RenderFlip(hdc, pos.x - img[5].GetImageInfo()->frameWidth, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::SFOOT)
 		{
-			img[6].RenderFlip(hdc, pos.x, pos.y, frameCount);
+			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
+			img[6].RenderFlip(hdc, pos.x - img[6].GetImageInfo()->frameWidth, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::COMBO)
 		{
-			img[7].RenderFlip(hdc, pos.x, pos.y, frameCount);
+			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
+			img[7].RenderFlip(hdc, pos.x - img[7].GetImageInfo()->frameWidth, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::DOWN)
 		{
-			img[8].RenderFlip(hdc, pos.x, pos.y, frameCount);
+			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			img[8].RenderFlip(hdc, pos.x - img[8].GetImageInfo()->frameWidth, pos.y, frameCount);
 		}
 	}
 }
@@ -422,6 +455,672 @@ void Iori_2P::Release()
 		img = nullptr;
 
 
+	}
+}
+
+void Iori_2P::Iori_Set_HitBox(int frameCount)
+{
+	if (iori_SidePosition == 1)
+	{
+		switch (ioriState)
+		{
+		case Chractor_STATE::FRONT:
+			rcHit.left = pos.x + 80; //왼쪽 여백
+			rcHit.top = pos.y + 78; //위에 높이 맞춰준 여백때문에 이정도
+			rcHit.right = pos.x + img[0].GetImageInfo()->frameWidth - 20; //오른쪽 여백
+			rcHit.bottom = pos.y + img[0].GetImageInfo()->frameHeight - 15; //아래 여백
+			break;
+		case Chractor_STATE::BACK:
+			rcHit.left = pos.x + 50;
+			rcHit.top = pos.y + 78;
+			rcHit.right = pos.x + img[1].GetImageInfo()->frameWidth - 30;
+			rcHit.bottom = pos.y + img[1].GetImageInfo()->frameHeight - 15;
+			break;
+		case Chractor_STATE::STAND:
+			rcHit.left = pos.x + 50;
+			rcHit.top = pos.y + 78;
+			rcHit.right = pos.x + img[2].GetImageInfo()->frameWidth - 15;
+			rcHit.bottom = pos.y + img[2].GetImageInfo()->frameHeight - 15;
+			break;
+		case Chractor_STATE::WHAND:
+			rcHit.left = pos.x + 80;
+			rcHit.top = pos.y + 78;
+			rcHit.right = pos.x + img[3].GetImageInfo()->frameWidth - 130;
+			rcHit.bottom = pos.y + img[3].GetImageInfo()->frameHeight - 15;
+			break;
+		case Chractor_STATE::SHAND:
+			if (frameCount == 0)
+			{
+				rcHit.left = pos.x + 150;
+				rcHit.top = pos.y + 78;
+				rcHit.right = pos.x + img[4].GetImageInfo()->frameWidth - 120;
+				rcHit.bottom = pos.y + img[4].GetImageInfo()->frameHeight - 15;
+			}
+			else if (frameCount == 1)
+			{
+				rcHit.left = pos.x + 160;
+				rcHit.top = pos.y + 78;
+				rcHit.right = pos.x + img[4].GetImageInfo()->frameWidth - 110;
+				rcHit.bottom = pos.y + img[4].GetImageInfo()->frameHeight - 15;
+			}
+			else if (frameCount == 2 || frameCount == 3 || frameCount == 4 || frameCount == 5 || frameCount == 6)
+			{
+				rcHit.left = pos.x + 180;
+				rcHit.top = pos.y + 120;
+				rcHit.right = pos.x + img[4].GetImageInfo()->frameWidth - 90;
+				rcHit.bottom = pos.y + img[4].GetImageInfo()->frameHeight - 15;
+			}
+			else
+			{
+				rcHit.left = pos.x + 180;
+				rcHit.top = pos.y + 78;
+				rcHit.right = pos.x + img[4].GetImageInfo()->frameWidth - 90;
+				rcHit.bottom = pos.y + img[4].GetImageInfo()->frameHeight - 15;
+			}
+			break;
+		case Chractor_STATE::WFOOT:
+			rcHit.left = pos.x + 80;
+			rcHit.top = pos.y + 78;
+			rcHit.right = pos.x + img[5].GetImageInfo()->frameWidth - 140;
+			rcHit.bottom = pos.y + img[5].GetImageInfo()->frameHeight - 15;
+			break;
+		case Chractor_STATE::SFOOT:
+			if (frameCount == 0)
+			{
+				rcHit.left = pos.x + 70;
+				rcHit.top = pos.y + 78;
+				rcHit.right = pos.x + img[6].GetImageInfo()->frameWidth - 250;
+				rcHit.bottom = pos.y + img[6].GetImageInfo()->frameHeight - 15;
+			}
+			else if (frameCount == 1 || frameCount == 2 || frameCount == 3 || frameCount == 4 || frameCount == 5)
+			{
+				rcHit.left = pos.x + 90;
+				rcHit.top = pos.y + 78;
+				rcHit.right = pos.x + img[6].GetImageInfo()->frameWidth - 190;
+				rcHit.bottom = pos.y + img[6].GetImageInfo()->frameHeight - 15;
+			}
+			else if (frameCount == 6 || frameCount == 7 || frameCount == 8)
+			{
+				rcHit.left = pos.x + 100;
+				rcHit.top = pos.y + 78;
+				rcHit.right = pos.x + img[6].GetImageInfo()->frameWidth - 180;
+				rcHit.bottom = pos.y + img[6].GetImageInfo()->frameHeight - 15;
+			}
+			else
+			{
+				rcHit.left = pos.x + 90;
+				rcHit.top = pos.y + 78;
+				rcHit.right = pos.x + img[6].GetImageInfo()->frameWidth - 190;
+				rcHit.bottom = pos.y + img[6].GetImageInfo()->frameHeight - 15;
+			}
+
+			break;
+		case Chractor_STATE::COMBO:
+			if (frameCount == 0)
+			{
+				rcHit.left = pos.x + 110;
+				rcHit.top = pos.y + 78;
+				rcHit.right = pos.x + img[7].GetImageInfo()->frameWidth - 510;
+				rcHit.bottom = pos.y + img[7].GetImageInfo()->frameHeight - 15;
+			}
+			else if (frameCount == 1 || frameCount == 2)
+			{
+				rcHit.left = pos.x + 120;
+				rcHit.top = pos.y + 78;
+				rcHit.right = pos.x + img[7].GetImageInfo()->frameWidth - 510;
+				rcHit.bottom = pos.y + img[7].GetImageInfo()->frameHeight - 15;
+			}
+			else if (frameCount == 3 || frameCount == 4)
+			{
+				rcHit.left = pos.x + 125;
+				rcHit.top = pos.y + 78;
+				rcHit.right = pos.x + img[7].GetImageInfo()->frameWidth - 505;
+				rcHit.bottom = pos.y + img[7].GetImageInfo()->frameHeight - 15;
+			}
+			else
+			{
+				rcHit.left = pos.x + 135;
+				rcHit.top = pos.y + 78;
+				rcHit.right = pos.x + img[7].GetImageInfo()->frameWidth - 510;
+				rcHit.bottom = pos.y + img[7].GetImageInfo()->frameHeight - 15;
+			}
+			break;
+		case Chractor_STATE::DOWN:
+			if (frameCount == 0 || frameCount == 1 || frameCount == 2)
+			{
+				rcHit.left = pos.x + 90;
+				rcHit.top = pos.y + 100;
+				rcHit.right = pos.x + img[8].GetImageInfo()->frameWidth - 180;
+				rcHit.bottom = pos.y + img[8].GetImageInfo()->frameHeight - 15;
+			}
+			else if (frameCount == 3 || frameCount == 4 || frameCount == 5 || frameCount == 6)
+			{
+				rcHit.left = pos.x + 110;
+				rcHit.top = pos.y + 110;
+				rcHit.right = pos.x + img[8].GetImageInfo()->frameWidth - 145;
+				rcHit.bottom = pos.y + img[8].GetImageInfo()->frameHeight - 15;
+			}
+			else if (frameCount == 7)
+			{
+				rcHit.left = pos.x + 110;
+				rcHit.top = pos.y + 120;
+				rcHit.right = pos.x + img[8].GetImageInfo()->frameWidth - 160;
+				rcHit.bottom = pos.y + img[8].GetImageInfo()->frameHeight - 15;
+			}
+			else if (frameCount == 8 || frameCount == 9)
+			{
+				rcHit.left = pos.x + 45;
+				rcHit.top = pos.y + 200;
+				rcHit.right = pos.x + img[8].GetImageInfo()->frameWidth - 125;
+				rcHit.bottom = pos.y + img[8].GetImageInfo()->frameHeight - 15;
+			}
+			else
+			{
+				rcHit.left = pos.x + 30;
+				rcHit.top = pos.y + 270;
+				rcHit.right = pos.x + img[8].GetImageInfo()->frameWidth;
+				rcHit.bottom = pos.y + img[8].GetImageInfo()->frameHeight - 15;
+			}
+			break;
+		}
+	}
+
+	if (iori_SidePosition == 2)
+	{
+		switch (ioriState)
+		{
+		case Chractor_STATE::FRONT:
+			rcHit.left = pos.x + 20 - img[0].GetImageInfo()->frameWidth; //왼쪽 여백
+			rcHit.top = pos.y + 78; //위에 높이 맞춰준 여백때문에 이정도
+			rcHit.right = pos.x - 80; //오른쪽 여백
+			rcHit.bottom = pos.y + img[0].GetImageInfo()->frameHeight - 15; //아래 여백
+			break;
+		case Chractor_STATE::BACK:
+			rcHit.left = pos.x + 30 - img[1].GetImageInfo()->frameWidth;
+			rcHit.top = pos.y + 78;
+			rcHit.right = pos.x - 50;
+			rcHit.bottom = pos.y + img[1].GetImageInfo()->frameHeight - 15;
+			break;
+		case Chractor_STATE::STAND:
+			rcHit.left = pos.x + 15 - img[2].GetImageInfo()->frameWidth;
+			rcHit.top = pos.y + 78;
+			rcHit.right = pos.x - 50;
+			rcHit.bottom = pos.y + img[2].GetImageInfo()->frameHeight - 15;
+			break;
+		case Chractor_STATE::WHAND:
+			rcHit.left = pos.x + 130 - img[3].GetImageInfo()->frameWidth;
+			rcHit.top = pos.y + 78;
+			rcHit.right = pos.x - 80;
+			rcHit.bottom = pos.y + img[3].GetImageInfo()->frameHeight - 15;
+			break;
+		case Chractor_STATE::SHAND:
+			if (frameCount == 0)
+			{
+				rcHit.left = pos.x + 120 - img[4].GetImageInfo()->frameWidth;
+				rcHit.top = pos.y + 78;
+				rcHit.right = pos.x - 150;
+				rcHit.bottom = pos.y + img[4].GetImageInfo()->frameHeight - 15;
+			}
+			else if (frameCount == 1)
+			{
+				rcHit.left = pos.x + 110 - img[4].GetImageInfo()->frameWidth;
+				rcHit.top = pos.y + 78;
+				rcHit.right = pos.x - 160;
+				rcHit.bottom = pos.y + img[4].GetImageInfo()->frameHeight - 15;
+			}
+			else if (frameCount == 2 || frameCount == 3 || frameCount == 4 || frameCount == 5 || frameCount == 6)
+			{
+				rcHit.left = pos.x + 90 - img[4].GetImageInfo()->frameWidth;
+				rcHit.top = pos.y + 120;
+				rcHit.right = pos.x - 180;
+				rcHit.bottom = pos.y + img[4].GetImageInfo()->frameHeight - 15;
+			}
+			else
+			{
+				rcHit.left = pos.x + 90 - img[4].GetImageInfo()->frameWidth;
+				rcHit.top = pos.y + 78;
+				rcHit.right = pos.x - 180;
+				rcHit.bottom = pos.y + img[4].GetImageInfo()->frameHeight - 15;
+			}
+			break;
+		case Chractor_STATE::WFOOT:
+			rcHit.left = pos.x + 140 - img[5].GetImageInfo()->frameWidth;
+			rcHit.top = pos.y + 78;
+			rcHit.right = pos.x - 80;
+			rcHit.bottom = pos.y + img[5].GetImageInfo()->frameHeight - 15;
+			break;
+		case Chractor_STATE::SFOOT:
+			if (frameCount == 0)
+			{
+				rcHit.left = pos.x - 250;
+				rcHit.top = pos.y + 78;
+				rcHit.right = pos.x - 70;
+				rcHit.bottom = pos.y + img[6].GetImageInfo()->frameHeight - 15;
+			}
+			else if (frameCount == 1 || frameCount == 2 || frameCount == 3 || frameCount == 4 || frameCount == 5)
+			{
+				rcHit.left = pos.x - 250;
+				rcHit.top = pos.y + 78;
+				rcHit.right = pos.x - 70;
+				rcHit.bottom = pos.y + img[6].GetImageInfo()->frameHeight - 15;
+			}
+			else if (frameCount == 6 || frameCount == 7 || frameCount == 8)
+			{
+				rcHit.left = pos.x - 250;
+				rcHit.top = pos.y + 78;
+				rcHit.right = pos.x - 80;
+				rcHit.bottom = pos.y + img[6].GetImageInfo()->frameHeight - 15;
+			}
+			else
+			{
+				rcHit.left = pos.x - 250;
+				rcHit.top = pos.y + 78;
+				rcHit.right = pos.x - 70;
+				rcHit.bottom = pos.y + img[6].GetImageInfo()->frameHeight - 15;
+			}
+
+			break;
+		case Chractor_STATE::COMBO:
+			if (frameCount == 0)
+			{
+				rcHit.left = pos.x + 510 - img[7].GetImageInfo()->frameWidth;
+				rcHit.top = pos.y + 78;
+				rcHit.right = pos.x - 110;
+				rcHit.bottom = pos.y + img[7].GetImageInfo()->frameHeight - 15;
+			}
+			else if (frameCount == 1 || frameCount == 2)
+			{
+				rcHit.left = pos.x + 510 - img[7].GetImageInfo()->frameWidth;
+				rcHit.top = pos.y + 78;
+				rcHit.right = pos.x - 120;
+				rcHit.bottom = pos.y + img[7].GetImageInfo()->frameHeight - 15;
+			}
+			else if (frameCount == 3 || frameCount == 4)
+			{
+				rcHit.left = pos.x + 505 - img[7].GetImageInfo()->frameWidth;
+				rcHit.top = pos.y + 78;
+				rcHit.right = pos.x - 125;
+				rcHit.bottom = pos.y + img[7].GetImageInfo()->frameHeight - 15;
+			}
+			else
+			{
+				rcHit.left = pos.x + 510 - img[7].GetImageInfo()->frameWidth;
+				rcHit.top = pos.y + 78;
+				rcHit.right = pos.x - 135;
+				rcHit.bottom = pos.y + img[7].GetImageInfo()->frameHeight - 15;
+			}
+			break;
+		case Chractor_STATE::DOWN:
+			if (frameCount == 0 || frameCount == 1 || frameCount == 2)
+			{
+				rcHit.left = pos.x + 180 - img[8].GetImageInfo()->frameWidth;
+				rcHit.top = pos.y + 100;
+				rcHit.right = pos.x - 90;
+				rcHit.bottom = pos.y + img[8].GetImageInfo()->frameHeight - 15;
+			}
+			else if (frameCount == 3 || frameCount == 4 || frameCount == 5 || frameCount == 6)
+			{
+				rcHit.left = pos.x + 140 - img[8].GetImageInfo()->frameWidth;
+				rcHit.top = pos.y + 110;
+				rcHit.right = pos.x - 110;
+				rcHit.bottom = pos.y + img[8].GetImageInfo()->frameHeight - 15;
+			}
+			else if (frameCount == 7)
+			{
+				rcHit.left = pos.x + 160 - img[8].GetImageInfo()->frameWidth;
+				rcHit.top = pos.y + 120;
+				rcHit.right = pos.x - 110;
+				rcHit.bottom = pos.y + img[8].GetImageInfo()->frameHeight - 15;
+			}
+			else if (frameCount == 8 || frameCount == 9)
+			{
+				rcHit.left = pos.x + 125 - img[8].GetImageInfo()->frameWidth;
+				rcHit.top = pos.y + 200;
+				rcHit.right = pos.x - 45;
+				rcHit.bottom = pos.y + img[8].GetImageInfo()->frameHeight - 15;
+			}
+			else
+			{
+				rcHit.left = pos.x - img[8].GetImageInfo()->frameWidth;
+				rcHit.top = pos.y + 270;
+				rcHit.right = pos.x - 30;
+				rcHit.bottom = pos.y + img[8].GetImageInfo()->frameHeight - 15;
+			}
+			break;
+		}
+	}
+}
+
+void Iori_2P::Iori_Set_AttackBox(int frameCount)
+{
+	if (iori_SidePosition == 1)
+	{
+		switch (ioriState)
+		{
+		case Chractor_STATE::WHAND:
+			if (frameCount == 3 || frameCount == 4)
+			{
+				rcAttack.left = pos.x + 150;
+				rcAttack.top = pos.y + 170;
+				rcAttack.right = pos.x + 350;
+				rcAttack.bottom = pos.y + 230;
+			}
+			else
+			{
+				rcAttack.left = 0;
+				rcAttack.top = 0;
+				rcAttack.right = 0;
+				rcAttack.bottom = 0;
+			}
+			break;
+		case Chractor_STATE::SHAND:
+			if (frameCount == 3 || frameCount == 4)
+			{
+				rcAttack.left = pos.x + 360;
+				rcAttack.top = pos.y + 80;
+				rcAttack.right = pos.x + 405;
+				rcAttack.bottom = pos.y + 130;
+			}
+			else
+			{
+				rcAttack.left = 0;
+				rcAttack.top = 0;
+				rcAttack.right = 0;
+				rcAttack.bottom = 0;
+			}
+			break;
+		case Chractor_STATE::WFOOT:
+			if (frameCount == 3 || frameCount == 4)
+			{
+				rcAttack.left = pos.x + 150;
+				rcAttack.top = pos.y + 190;
+				rcAttack.right = pos.x + 380;
+				rcAttack.bottom = pos.y + 260;
+			}
+			else
+			{
+				rcAttack.left = 0;
+				rcAttack.top = 0;
+				rcAttack.right = 0;
+				rcAttack.bottom = 0;
+			}
+			break;
+		case Chractor_STATE::SFOOT:
+			if (frameCount == 5 || frameCount == 6)
+			{
+				rcAttack.left = pos.x + 150;
+				rcAttack.top = pos.y + 130;
+				rcAttack.right = pos.x + 460;
+				rcAttack.bottom = pos.y + 200;
+			}
+			else
+			{
+				rcAttack.left = 0;
+				rcAttack.top = 0;
+				rcAttack.right = 0;
+				rcAttack.bottom = 0;
+			}
+			break;
+		case Chractor_STATE::COMBO:
+			if (frameCount == 6)
+			{
+				rcAttack.left = pos.x + 375;
+				rcAttack.top = pos.y + 230;
+				rcAttack.right = pos.x + 447;
+				rcAttack.bottom = pos.y + 387;
+			}
+			else if (frameCount == 7)
+			{
+				rcAttack.left = pos.x + 396;
+				rcAttack.top = pos.y + 230;
+				rcAttack.right = pos.x + 490;
+				rcAttack.bottom = pos.y + 387;
+			}
+			else if (frameCount == 8)
+			{
+				rcAttack.left = pos.x + 426;
+				rcAttack.top = pos.y + 250;
+				rcAttack.right = pos.x + 513;
+				rcAttack.bottom = pos.y + 387;
+			}
+			else if (frameCount == 9)
+			{
+				rcAttack.left = pos.x + 447;
+				rcAttack.top = pos.y + 270;
+				rcAttack.right = pos.x + 546;
+				rcAttack.bottom = pos.y + 387;
+			}
+			else if (frameCount == 10)
+			{
+				rcAttack.left = pos.x + 486;
+				rcAttack.top = pos.y + 300;
+				rcAttack.right = pos.x + 566;
+				rcAttack.bottom = pos.y + 387;
+			}
+			else if (frameCount == 11)
+			{
+				rcAttack.left = pos.x + 519;
+				rcAttack.top = pos.y + 180;
+				rcAttack.right = pos.x + 596;
+				rcAttack.bottom = pos.y + 387;
+			}
+			else if (frameCount == 12)
+			{
+				rcAttack.left = pos.x + 546;
+				rcAttack.top = pos.y + 180;
+				rcAttack.right = pos.x + 627;
+				rcAttack.bottom = pos.y + 387;
+			}
+			else if (frameCount == 13)
+			{
+				rcAttack.left = pos.x + 594;
+				rcAttack.top = pos.y + 250;
+				rcAttack.right = pos.x + 669;
+				rcAttack.bottom = pos.y + 387;
+			}
+			else if (frameCount == 14)
+			{
+				rcAttack.left = pos.x + 621;
+				rcAttack.top = pos.y + 300;
+				rcAttack.right = pos.x + 684;
+				rcAttack.bottom = pos.y + 387;
+			}
+			else if (frameCount == 15)
+			{
+				rcAttack.left = pos.x + 657;
+				rcAttack.top = pos.y + 300;
+				rcAttack.right = pos.x + 705;
+				rcAttack.bottom = pos.y + 387;
+			}
+			else if (frameCount == 16)
+			{
+				rcAttack.left = pos.x + 684;
+				rcAttack.top = pos.y + 300;
+				rcAttack.right = pos.x + 732;
+				rcAttack.bottom = pos.y + 387;
+			}
+			else if (frameCount == 17)
+			{
+				rcAttack.left = pos.x + 711;
+				rcAttack.top = pos.y + 336;
+				rcAttack.right = pos.x + 759;
+				rcAttack.bottom = pos.y + 387;
+			}
+
+			else
+			{
+				rcAttack.left = 0;
+				rcAttack.top = 0;
+				rcAttack.right = 0;
+				rcAttack.bottom = 0;
+			}
+			break;
+		}
+	}
+
+	if (iori_SidePosition == 2)
+	{
+		switch (ioriState)
+		{
+		case Chractor_STATE::WHAND:
+			if (frameCount == 3 || frameCount == 4)
+			{
+				rcAttack.left = pos.x - 150;
+				rcAttack.top = pos.y + 170;
+				rcAttack.right = pos.x - 350;
+				rcAttack.bottom = pos.y + 230;
+			}
+			else
+			{
+				rcAttack.left = 0;
+				rcAttack.top = 0;
+				rcAttack.right = 0;
+				rcAttack.bottom = 0;
+			}
+			break;
+		case Chractor_STATE::SHAND:
+			if (frameCount == 3 || frameCount == 4)
+			{
+				rcAttack.left = pos.x - 360;
+				rcAttack.top = pos.y + 80;
+				rcAttack.right = pos.x - 405;
+				rcAttack.bottom = pos.y + 130;
+			}
+			else
+			{
+				rcAttack.left = 0;
+				rcAttack.top = 0;
+				rcAttack.right = 0;
+				rcAttack.bottom = 0;
+			}
+			break;
+		case Chractor_STATE::WFOOT:
+			if (frameCount == 3 || frameCount == 4)
+			{
+				rcAttack.left = pos.x - 150;
+				rcAttack.top = pos.y + 190;
+				rcAttack.right = pos.x - 380;
+				rcAttack.bottom = pos.y + 260;
+			}
+			else
+			{
+				rcAttack.left = 0;
+				rcAttack.top = 0;
+				rcAttack.right = 0;
+				rcAttack.bottom = 0;
+			}
+			break;
+		case Chractor_STATE::SFOOT:
+			if (frameCount == 5 || frameCount == 6)
+			{
+				rcAttack.left = pos.x - 150;
+				rcAttack.top = pos.y + 130;
+				rcAttack.right = pos.x - 460;
+				rcAttack.bottom = pos.y + 200;
+			}
+			else
+			{
+				rcAttack.left = 0;
+				rcAttack.top = 0;
+				rcAttack.right = 0;
+				rcAttack.bottom = 0;
+			}
+			break;
+		case Chractor_STATE::COMBO:
+			if (frameCount == 6)
+			{
+				rcAttack.left = pos.x - 375;
+				rcAttack.top = pos.y + 230;
+				rcAttack.right = pos.x - 447;
+				rcAttack.bottom = pos.y + 387;
+			}
+			else if (frameCount == 7)
+			{
+				rcAttack.left = pos.x - 396;
+				rcAttack.top = pos.y + 230;
+				rcAttack.right = pos.x - 490;
+				rcAttack.bottom = pos.y + 387;
+			}
+			else if (frameCount == 8)
+			{
+				rcAttack.left = pos.x - 426;
+				rcAttack.top = pos.y + 250;
+				rcAttack.right = pos.x - 513;
+				rcAttack.bottom = pos.y + 387;
+			}
+			else if (frameCount == 9)
+			{
+				rcAttack.left = pos.x - 447;
+				rcAttack.top = pos.y + 270;
+				rcAttack.right = pos.x - 546;
+				rcAttack.bottom = pos.y + 387;
+			}
+			else if (frameCount == 10)
+			{
+				rcAttack.left = pos.x - 486;
+				rcAttack.top = pos.y + 300;
+				rcAttack.right = pos.x - 566;
+				rcAttack.bottom = pos.y + 387;
+			}
+			else if (frameCount == 11)
+			{
+				rcAttack.left = pos.x - 519;
+				rcAttack.top = pos.y + 180;
+				rcAttack.right = pos.x - 596;
+				rcAttack.bottom = pos.y + 387;
+			}
+			else if (frameCount == 12)
+			{
+				rcAttack.left = pos.x - 546;
+				rcAttack.top = pos.y + 180;
+				rcAttack.right = pos.x - 627;
+				rcAttack.bottom = pos.y + 387;
+			}
+			else if (frameCount == 13)
+			{
+				rcAttack.left = pos.x - 594;
+				rcAttack.top = pos.y + 250;
+				rcAttack.right = pos.x - 669;
+				rcAttack.bottom = pos.y + 387;
+			}
+			else if (frameCount == 14)
+			{
+				rcAttack.left = pos.x - 621;
+				rcAttack.top = pos.y + 300;
+				rcAttack.right = pos.x - 684;
+				rcAttack.bottom = pos.y + 387;
+			}
+			else if (frameCount == 15)
+			{
+				rcAttack.left = pos.x - 657;
+				rcAttack.top = pos.y + 300;
+				rcAttack.right = pos.x - 705;
+				rcAttack.bottom = pos.y + 387;
+			}
+			else if (frameCount == 16)
+			{
+				rcAttack.left = pos.x - 684;
+				rcAttack.top = pos.y + 300;
+				rcAttack.right = pos.x - 732;
+				rcAttack.bottom = pos.y + 387;
+			}
+			else if (frameCount == 17)
+			{
+				rcAttack.left = pos.x - 711;
+				rcAttack.top = pos.y + 336;
+				rcAttack.right = pos.x - 759;
+				rcAttack.bottom = pos.y + 387;
+			}
+
+			else
+			{
+				rcAttack.left = 0;
+				rcAttack.top = 0;
+				rcAttack.right = 0;
+				rcAttack.bottom = 0;
+			}
+			break;
+		}
 	}
 }
 

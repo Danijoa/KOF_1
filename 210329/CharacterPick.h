@@ -16,6 +16,10 @@ private:
 	RECT *shape1P;			
 	RECT* shape2P;
 
+	RECT* select_1p;
+	RECT* select_2p;
+	HPEN Pen, OldPen;
+
 	Image* backBuffer;		//이미지 정보들을 한곳에 담아 보내 줄 수 있도록 하는 백버퍼
 	Image* backGround;		//배경
 	Image* big_1p;			//1P 큰창 캐릭터 3개

@@ -15,7 +15,7 @@ private:
 
 	int attackValue;
 	int elapsedTime;	//100이 될 때마다 애니메이션 프레임 1씩 증가
-	int chracterFrame; 
+	int chracterFrame;
 	int frameCount;
 	int stateCount;		//총 동작 개수 - 나중에 동작 추가하면 변경하려고
 
@@ -36,6 +36,13 @@ private:
 
 	bool moveback_R;
 	bool moveback_L;
+
+	///////////// 추가 부분 - 충돌 /////////////////
+	RECT rcHit;
+	RECT rcAttack;
+
+
+
 public:
 
 	HRESULT Init();
@@ -51,6 +58,13 @@ public:
 	inline void setBackMove_R(bool b) { this->moveback_R = b; }
 	inline int getBackMove_L() { return moveback_L; }
 	inline void setBackMove_L(bool b) { this->moveback_L = b; }
+
+	///////////// 추가 부분 - 충돌 /////////////////
+	void Iori_Set_HitBox(int frameCount);
+	void Iori_Set_AttackBox(int frameCount);
+
+	inline RECT getRcHit() { return rcHit; }
+	inline RECT getRcAttack() { return rcAttack; }
 
 	Iori_1P();
 	~Iori_1P();

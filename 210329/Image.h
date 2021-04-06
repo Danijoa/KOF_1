@@ -87,5 +87,8 @@ public:
 			return this->imageInfo->hMemDC;
 		return NULL;
 	};
+
+	///////////// 추가부분 - 충돌 ////////////
+	inline IMAGE_INFO* GetImageInfo() { return this->imageInfo; }
 };
 

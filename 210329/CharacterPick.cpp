@@ -12,7 +12,7 @@ HRESULT CharacterPick::Init()
 	backBuffer->Init(WINSIZE_X, WINSIZE_Y);
 
 	backGround = new Image();
-	backGround->Init("Image/mapImage.bmp", WINSIZE_X, WINSIZE_Y);
+	backGround->Init("Image/mapImage_2.bmp", WINSIZE_X, WINSIZE_Y);
 
 	//1P 작은 캐릭터 창
 	shape1P = new RECT[3];
@@ -23,6 +23,10 @@ HRESULT CharacterPick::Init()
 	small_1p[0].Init("Image/kyo_pick.bmp", 70, 70);
 	small_1p[1].Init("Image/iori_pick.bmp", 70, 70);
 	small_1p[2].Init("Image/kim_pick.bmp", 70, 70);
+
+	select_1p = new RECT[3];
+	for (int i = 0; i < 3; i++)
+		select_1p[i] = GetRect(150 + 100 * i - 2, WINSIZE_Y - 150 - 2, 74, 74);
 
 
 	//2P 작은 캐릭터 창
@@ -35,17 +39,21 @@ HRESULT CharacterPick::Init()
 	small_2p[1].Init("Image/iori_pick.bmp", 70, 70);
 	small_2p[2].Init("Image/kim_pick.bmp", 70, 70);
 
+	select_2p = new RECT[3];
+	for (int i = 0; i < 3; i++)
+		select_2p[i] = GetRect(970 + 100 * i - 2, WINSIZE_Y - 150 - 2, 74, 74);
+
 	//1P 큰 캐릭터 창
 	big_1p = new Image[3];
-	big_1p[0].Init("Image/kyo_pick.bmp", 500, 500);
-	big_1p[1].Init("Image/iori_pick.bmp", 500, 500);
-	big_1p[2].Init("Image/kim_pick.bmp", 500, 500);
+	big_1p[0].Init("Image/kyo_pick.bmp", 500, 500, true, RGB(255, 255, 255));
+	big_1p[1].Init("Image/iori_pick.bmp", 500, 500, true, RGB(255, 255, 255));
+	big_1p[2].Init("Image/kim_pick.bmp", 500, 500, true, RGB(255, 255, 255));
 
 	//2P 큰 캐릭터 창
 	big_2p = new Image[3];
-	big_2p[0].Init("Image/kyo_pick.bmp", 500, 500);
-	big_2p[1].Init("Image/iori_pick.bmp", 500, 500);
-	big_2p[2].Init("Image/kim_pick.bmp", 500, 500);
+	big_2p[0].Init("Image/kyo_pick.bmp", 500, 500, true, RGB(255, 255, 255));
+	big_2p[1].Init("Image/iori_pick.bmp", 500, 500, true, RGB(255, 255, 255));
+	big_2p[2].Init("Image/kim_pick.bmp", 500, 500, true, RGB(255, 255, 255));
 
 	//캐릭터 선택
 	nameCheck[0] = "kyo";	nameCheck[1] = "iori";	nameCheck[2] = "kim";
@@ -147,6 +155,26 @@ void CharacterPick::Render(HDC hdc)
 	wsprintf(text2P, "2P %s", nameCheck[curSmall_2P]);
 	TextOut(hBack, 970, 10, text2P, strlen(text2P));
 
+	if (big_1p)
+	{
+		big_1p[curSmall_1P].Render(hBack, 100, 50);
+		Pen = CreatePen(PS_SOLID, 5, RGB(0, 0, 255));
+		OldPen = (HPEN)SelectObject(hBack, Pen);
+		Rectangle(hBack, select_1p[curSmall_1P].left, select_1p[curSmall_1P].top, select_1p[curSmall_1P].right, select_1p[curSmall_1P].bottom);
+		SelectObject(hBack, OldPen);
+		DeleteObject(Pen);
+	}
+
+	if (big_2p)
+	{
+		big_2p[curSmall_2P].Render(hBack, 900, 50);
+		Pen = CreatePen(PS_SOLID, 5, RGB(255, 0, 0));
+		OldPen = (HPEN)SelectObject(hBack, Pen);
+		Rectangle(hBack, select_2p[curSmall_2P].left, select_2p[curSmall_2P].top, select_2p[curSmall_2P].right, select_2p[curSmall_2P].bottom);
+		SelectObject(hBack, OldPen);
+		DeleteObject(Pen);
+	}
+
 	//작은 캐릭터 창
 	for (int i = 0; i < 3; i++)
 	{
@@ -155,13 +183,6 @@ void CharacterPick::Render(HDC hdc)
 		if (small_2p)
 			small_2p[i].Render(hBack, shape2P[i].left, shape2P[i].top);
 	}
-
-	//큰 캐릭터 창
-	if (big_1p)
-		big_1p[curSmall_1P].Render(hBack, 100, 50);
-
-	if (big_2p)
-		big_2p[curSmall_2P].Render(hBack, 900, 50);
 
 	backBuffer->Render(hdc);
 }

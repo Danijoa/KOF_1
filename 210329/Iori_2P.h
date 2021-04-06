@@ -34,9 +34,15 @@ private:
 	int elapsedTime3;		//벡터 마지막 스킬 저장 시간
 	int storeLast;			//벡터 마지막 스킬 저장
 	bool checkCombo;		//콤보 발생 여부
-	
+
 	bool moveback_R;
 	bool moveback_L;
+
+	///////////// 추가 부분 - 충돌 /////////////////
+	RECT rcHit;
+	RECT rcAttack;
+
+
 
 public:
 
@@ -53,6 +59,13 @@ public:
 	inline void setBackMove_R(bool b) { this->moveback_R = b; }
 	inline int getBackMove_L() { return moveback_L; }
 	inline void setBackMove_L(bool b) { this->moveback_L = b; }
+
+	///////////// 추가 부분 - 충돌 /////////////////
+	void Iori_Set_HitBox(int frameCount);
+	void Iori_Set_AttackBox(int frameCount);
+
+	inline RECT getRcHit() { return rcHit; }
+	inline RECT getRcAttack() { return rcAttack; }
 
 	Iori_2P();
 	~Iori_2P();
