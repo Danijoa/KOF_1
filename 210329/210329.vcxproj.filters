@@ -80,9 +80,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MainGame.h">
-      <Filter>MainGame%28Battle%29</Filter>
-    </ClInclude>
     <ClInclude Include="Singleton.h">
       <Filter>2D Framework</Filter>
     </ClInclude>
@@ -130,6 +127,9 @@
     </ClInclude>
     <ClInclude Include="KimKaphwan_1P.h">
       <Filter>MainGame%28Battle%29\KOF Character</Filter>
+    </ClInclude>
+    <ClInclude Include="MainGame.h">
+      <Filter>MainGame%28Battle%29</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

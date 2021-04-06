@@ -9,7 +9,7 @@ HRESULT Kyo_1P::Init()
 
 	name = "KYO";
 	pos.x = 200;
-	pos.y = 100;
+	pos.y = 100 + 80;
 	hp = 100;
 
 	characterFrame = 10;
@@ -138,9 +138,9 @@ void Kyo_1P::Motion1P()
 			kyoState = State::BACK;
 			characterFrame = 6;
 		}
-		if (pos.x + 522 / 5 < WINSIZE_X - 10)
+		if (pos.x + 250 < WINSIZE_X - 10)
 			pos.x += 3;
-		if (pos.x + 522 / 5 > WINSIZE_X - 200)
+		if (pos.x + 250 > WINSIZE_X - 200)
 			moveback_R = true;
 	}
 	if (KeyManager::GetSingleton()->IsOnceKeyUp('N') && canInput)
@@ -185,6 +185,7 @@ void Kyo_1P::Motion1P()
 		myV.push_back('Q');
 		if (canInput)
 		{
+			attackValue = 20;
 			canInput = false;
 			kyoState = State::SHAND;
 			characterFrame = 7 + 1;
@@ -198,29 +199,18 @@ void Kyo_1P::Motion1P()
 		myV.push_back('E');
 		if (canInput)
 		{
+			attackValue = 20;
 			canInput = false;
 			kyoState = State::SFOOT;
 			characterFrame = 9 + 1;
 			frameCount = 0;
-
-			if (kyo_SidePosition == 1)
-			{
-				rcAttack_pos.x = pos.x + 270;
-				rcAttack_pos.y = pos.y + 190;
-			}
-			if (kyo_SidePosition == 2)
-			{
-				//rcAttack_pos.x = pos.x - 110;
-				//rcAttack_pos.y = pos.y + 190;
-			}
-			rcAttack_Size.x = 55;
-			rcAttack_Size.y = 55;
 		}
 	}
 
 	//ÄÞº¸
 	if (checkCombo)
 	{
+		attackValue = 10;
 		canInput = false;
 		kyoState = State::COMBO;
 		characterFrame = 20 + 1;
@@ -234,6 +224,7 @@ void Kyo_1P::Motion1P()
 		myV.push_back('A');
 		if (canInput)
 		{
+			attackValue = 10;
 			canInput = false;
 			kyoState = State::WHAND;
 			characterFrame = 5 + 1;
@@ -247,6 +238,7 @@ void Kyo_1P::Motion1P()
 		myV.push_back('D');
 		if (canInput)
 		{
+			attackValue = 10;
 			canInput = false;
 			kyoState = State::WFOOT;
 			characterFrame = 7 + 1;

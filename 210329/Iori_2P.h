@@ -60,6 +60,10 @@ public:
 	inline int getBackMove_L() { return moveback_L; }
 	inline void setBackMove_L(bool b) { this->moveback_L = b; }
 
+	inline int getAttackValue() { return attackValue; }
+	inline int getHP() { return hp; }
+	inline void setHP(int enemyAttackValue) { this->hp -= enemyAttackValue; }
+
 	///////////// 추가 부분 - 충돌 /////////////////
 	void Iori_Set_HitBox(int frameCount);
 	void Iori_Set_AttackBox(int frameCount);

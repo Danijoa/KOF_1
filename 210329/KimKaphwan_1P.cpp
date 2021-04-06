@@ -7,8 +7,8 @@ HRESULT KimKaphwan_1P::Init()
 {
 	kim_SidePosition = 1;
 	name = "KIM";
-	pos.x = 200;
-	pos.y = 100;
+	pos.x = 50;
+	pos.y = 30;
 	hp = 100;
 
 	characterFrame = 11;
@@ -73,7 +73,7 @@ HRESULT KimKaphwan_1P::Init()
 	}
 
 	down = new Image();
-	if (FAILED(combo->Init("Image/kimkap_super.bmp", 5838, 660, 46, 1, true, RGB(255, 255, 255))))
+	if (FAILED(down->Init("Image/kimkap_fall.bmp", 5838, 660, 46, 1, true, RGB(255, 255, 255))))
 	{
 		MessageBox(g_hWnd, "김갑환 로드 실패", "경고", MB_OK);
 		return E_FAIL;
@@ -88,6 +88,9 @@ HRESULT KimKaphwan_1P::Init()
 	elapsedTime3 = 0;
 	storeLast = 0 - '0';
 	checkCombo = false;
+
+	rcHit = { (int)pos.x + 40, (int)pos.y + 300, (int)pos.x + 180, (int)pos.y + 630 };
+	rcAttack = { 0, 0, 0, 0 };
 
 	moveback_R = false;
 	moveback_L = false;
@@ -113,9 +116,13 @@ void KimKaphwan_1P::Motion1P()
 			kimState = State::BACK;
 			characterFrame = 6;
 		}
-		if (pos.x + 522 / 5 < WINSIZE_X - 10)
+		if (pos.x + 250 < WINSIZE_X - 10)
+		{
 			pos.x += 3;
-		if (pos.x + 522 / 5 > WINSIZE_X - 200)
+			rcHit.left += 3;
+			rcHit.right += 3;
+		}
+		if (pos.x + 250 > WINSIZE_X - 200)
 			moveback_R = true;
 	}
 	if (KeyManager::GetSingleton()->IsOnceKeyUp('N') && canInput)
@@ -143,7 +150,11 @@ void KimKaphwan_1P::Motion1P()
 			characterFrame = 6;
 		}
 		if (pos.x > 0 + 10)
+		{
 			pos.x -= 3;
+			rcHit.left -= 3;
+			rcHit.right -= 3;
+		}
 		if (pos.x < 0 + 150)
 			moveback_L = true;
 	}
@@ -160,6 +171,7 @@ void KimKaphwan_1P::Motion1P()
 		myV.push_back('Q');
 		if (canInput)
 		{
+			attackValue = 20;
 			canInput = false;
 			kimState = State::SHAND;
 			characterFrame = 3 + 1;
@@ -173,6 +185,7 @@ void KimKaphwan_1P::Motion1P()
 		myV.push_back('E');
 		if (canInput)
 		{
+			attackValue = 20;
 			canInput = false;
 			kimState = State::SFOOT;
 			characterFrame = 6 + 1;
@@ -183,12 +196,12 @@ void KimKaphwan_1P::Motion1P()
 	//콤보
 	if (checkCombo)
 	{
+		attackValue = 10;
 		canInput = false;
 		kimState = State::COMBO;
 		characterFrame = 46 + 1;
 		frameCount = 0;
 		checkCombo = false;
-		pos.x += 520;
 	}
 
 	//약손
@@ -197,6 +210,7 @@ void KimKaphwan_1P::Motion1P()
 		myV.push_back('A');
 		if (canInput)
 		{
+			attackValue = 10;
 			canInput = false;
 			kimState = State::WHAND;
 			characterFrame = 2 + 1;
@@ -210,10 +224,106 @@ void KimKaphwan_1P::Motion1P()
 		myV.push_back('D');
 		if (canInput)
 		{
+			attackValue = 10;
 			canInput = false;
 			kimState = State::WFOOT;
 			characterFrame = 6 + 1;
 			frameCount = 0;
+		}
+	}
+}
+
+void KimKaphwan_1P::ComboBox()
+{
+	//1p방향
+	if (kim_SidePosition == 1)
+	{
+		if (kimState == State::COMBO) {
+			if (frameCount >= 6)
+				rcAttack = { (int)pos.x + 400, (int)pos.y + 560, (int)pos.x + 460, (int)pos.y + 620 };
+			if (frameCount >= 9)
+				rcAttack = { (int)pos.x + 500, (int)pos.y + 500, (int)pos.x + 560, (int)pos.y + 560 };
+			if (frameCount >= 11)
+				rcAttack = { (int)pos.x + 580, (int)pos.y + 400, (int)pos.x + 640, (int)pos.y + 460 };
+			if (frameCount >= 14)
+				rcAttack = { (int)pos.x + 580, (int)pos.y + 560, (int)pos.x + 640, (int)pos.y + 620 };
+			if (frameCount >= 20)
+				rcAttack = { (int)pos.x + 420, (int)pos.y + 240, (int)pos.x + 480, (int)pos.y + 300 };
+			if (frameCount >= 25)
+				rcAttack = { (int)pos.x + 430, (int)pos.y + 200, (int)pos.x + 490, (int)pos.y + 260 };
+			if (frameCount >= 32)
+				rcAttack = { (int)pos.x + 600, (int)pos.y + 190, (int)pos.x + 660, (int)pos.y + 250 };
+			if (frameCount >= 40)
+				rcAttack = { (int)pos.x + 760, (int)pos.y + 190, (int)pos.x + 820, (int)pos.y + 310 };
+
+		}
+	}
+
+	//2p방향
+	if (kim_SidePosition == 2)
+	{
+		if (kimState == State::COMBO) {
+			if (frameCount >= 6)
+				rcAttack = { (int)pos.x - 220, (int)pos.y + 560, (int)pos.x - 160, (int)pos.y + 620 };
+			if (frameCount >= 9)
+				rcAttack = { (int)pos.x - 320, (int)pos.y + 500, (int)pos.x - 260, (int)pos.y + 560 };
+			if (frameCount >= 11)
+				rcAttack = { (int)pos.x - 390, (int)pos.y + 400, (int)pos.x - 330, (int)pos.y + 460 };
+			if (frameCount >= 14)
+				rcAttack = { (int)pos.x - 390, (int)pos.y + 560, (int)pos.x - 330, (int)pos.y + 620 };
+			if (frameCount >= 20)
+				rcAttack = { (int)pos.x - 220, (int)pos.y + 240, (int)pos.x - 160, (int)pos.y + 300 };
+			if (frameCount >= 25)
+				rcAttack = { (int)pos.x - 230, (int)pos.y + 200, (int)pos.x - 170, (int)pos.y + 260 };
+			if (frameCount >= 32)
+				rcAttack = { (int)pos.x - 400, (int)pos.y + 190, (int)pos.x - 340, (int)pos.y + 250 };
+			if (frameCount >= 40)
+				rcAttack = { (int)pos.x - 570, (int)pos.y + 190, (int)pos.x - 510, (int)pos.y + 310 };
+		}
+
+	}
+}
+
+void KimKaphwan_1P::HitBox()
+{
+	//1p 방향
+	if (kim_SidePosition == 1)
+	{
+
+		if (kimState == State::WHAND) {
+			rcAttack = { (int)pos.x + 200 , (int)pos.y + 330, (int)pos.x + 260, (int)pos.y + 390 };
+		}
+
+		if (kimState == State::SHAND) {
+			rcAttack = { (int)pos.x + 330,  (int)pos.y + 390, (int)pos.x + 390, (int)pos.y + 450 };
+		}
+
+		if (kimState == State::WFOOT && frameCount >= 3) {
+			rcAttack = { (int)pos.x + 280,  (int)pos.y + 306, (int)pos.x + 340, (int)pos.y + 366 };
+		}
+
+		if (kimState == State::SFOOT && frameCount >= 3) {
+			rcAttack = { (int)pos.x + 236,  (int)pos.y + 288, (int)pos.x + 302, (int)pos.y + 354 };
+		}
+	}
+
+	//2p 방향
+	if (kim_SidePosition == 2)
+	{
+		if (kimState == State::WHAND) {
+			rcAttack = { (int)pos.x - 40 , (int)pos.y + 330, (int)pos.x + 20, (int)pos.y + 390 };
+		}
+
+		if (kimState == State::SHAND) {
+			rcAttack = { (int)pos.x - 170,  (int)pos.y + 390, (int)pos.x - 110, (int)pos.y + 450 };
+		}
+
+		if (kimState == State::WFOOT && frameCount >= 3) {
+			rcAttack = { (int)pos.x - 120,  (int)pos.y + 306, (int)pos.x - 60, (int)pos.y + 366 };
+		}
+
+		if (kimState == State::SFOOT && frameCount >= 3) {
+			rcAttack = { (int)pos.x - 82,  (int)pos.y + 288, (int)pos.x - 16, (int)pos.y + 354 };
 		}
 	}
 }
@@ -223,6 +333,13 @@ void KimKaphwan_1P::FrameCheck()
 	elapsedTime++;
 	if (elapsedTime >= 9)
 	{
+		if (kimState == State::COMBO)
+		{
+			ComboBox();
+		}
+		else
+			HitBox();
+
 		frameCount = (frameCount + 1) % characterFrame;
 		elapsedTime = 0;
 	}
@@ -286,10 +403,27 @@ void KimKaphwan_1P::Update()
 
 		if (frameCount + 1 == characterFrame)
 		{
+			//콤보의 방향
+			if (kimState == State::COMBO)
+			{
+				if (kim_SidePosition == 1) {
+					pos.x += 520;
+					rcHit.left += 520;
+					rcHit.right += 520;
+				}
+
+				if (kim_SidePosition == 2) {
+					pos.x -= 520;
+					rcHit.left -= 520;
+					rcHit.right -= 520;
+				}
+			}
+
 			kimState = State::STAND;
 			characterFrame = 11;
 			frameCount = 0;
 			canInput = true;
+			rcAttack = { 0, 0, 0, 0 };
 		}
 	}
 	else
@@ -315,6 +449,9 @@ void KimKaphwan_1P::Render(HDC hdc)
 	//모션 렌더
 	if (kim_SidePosition == 1)
 	{
+		Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+		Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
+
 		switch (kimState)
 		{
 		case State::STAND:
@@ -348,6 +485,9 @@ void KimKaphwan_1P::Render(HDC hdc)
 	}
 	else if (kim_SidePosition == 2)
 	{
+		Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+		Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
+
 		switch (kimState)
 		{
 		case State::STAND:
@@ -357,22 +497,22 @@ void KimKaphwan_1P::Render(HDC hdc)
 			front->RenderFlip(hdc, pos.x, pos.y, frameCount);
 			break;
 		case State::BACK:
-			back->RenderFlip(hdc, pos.x, pos.y, frameCount);
+			back->RenderFlip(hdc, pos.x - 50, pos.y, frameCount);
 			break;
 		case State::SHAND:
-			sHand->RenderFlip(hdc, pos.x, pos.y, frameCount);
+			sHand->RenderFlip(hdc, pos.x - 220, pos.y, frameCount);
 			break;
 		case State::SFOOT:
-			sFoot->RenderFlip(hdc, pos.x, pos.y, frameCount);
+			sFoot->RenderFlip(hdc, pos.x - 120, pos.y, frameCount);
 			break;
 		case State::COMBO:
-			combo->RenderFlip(hdc, pos.x, pos.y, frameCount);
+			combo->RenderFlip(hdc, pos.x - 600, pos.y, frameCount);
 			break;
 		case State::WHAND:
-			wHand->RenderFlip(hdc, pos.x, pos.y, frameCount);
+			wHand->RenderFlip(hdc, pos.x - 80, pos.y, frameCount);
 			break;
 		case State::WFOOT:
-			wFoot->RenderFlip(hdc, pos.x, pos.y, frameCount);
+			wFoot->RenderFlip(hdc, pos.x - 220, pos.y, frameCount);
 			break;
 		case State::DOWN:
 			down->RenderFlip(hdc, pos.x, pos.y, frameCount);

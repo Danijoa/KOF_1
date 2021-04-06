@@ -9,7 +9,7 @@ HRESULT Kyo_2P::Init()
 
 	name = "KYO";
 	pos.x = WINSIZE_X - 700;
-	pos.y = 100;
+	pos.y = 100 + 80;
 	hp = 100;
 
 	characterFrame = 10;
@@ -167,9 +167,9 @@ void Kyo_2P::Motion2P()
 			kyoState = State::FRONT;
 			characterFrame = 5;
 		}
-		if (pos.x + 522 / 5 < WINSIZE_X - 10)
+		if (pos.x + 250 < WINSIZE_X - 10)
 			pos.x += 3;
-		if (pos.x + 522 / 5 > WINSIZE_X - 200)
+		if (pos.x + 250 > WINSIZE_X - 200)
 			moveback_R = true;
 	}
 	if (KeyManager::GetSingleton()->IsOnceKeyUp(VK_RIGHT) && canInput)
@@ -185,6 +185,7 @@ void Kyo_2P::Motion2P()
 		myV.push_back('U');
 		if (canInput)
 		{
+			attackValue = 20;
 			canInput = false;
 			kyoState = State::SHAND;
 			characterFrame = 7 + 1;
@@ -198,6 +199,7 @@ void Kyo_2P::Motion2P()
 		myV.push_back('O');
 		if (canInput)
 		{
+			attackValue = 20;
 			canInput = false;
 			kyoState = State::SFOOT;
 			characterFrame = 9 + 1;
@@ -208,6 +210,7 @@ void Kyo_2P::Motion2P()
 	//콤보
 	if (checkCombo)
 	{
+		attackValue = 10;
 		canInput = false;
 		kyoState = State::COMBO;
 		characterFrame = 20 + 1;
@@ -221,6 +224,7 @@ void Kyo_2P::Motion2P()
 		myV.push_back('J');
 		if (canInput)
 		{
+			attackValue = 10;
 			canInput = false;
 			kyoState = State::WHAND;
 			characterFrame = 5 + 1;
@@ -234,6 +238,7 @@ void Kyo_2P::Motion2P()
 		myV.push_back('L');
 		if (canInput)
 		{
+			attackValue = 10;
 			canInput = false;
 			kyoState = State::WFOOT;
 			characterFrame = 7 + 1;
@@ -427,11 +432,11 @@ void Kyo_2P::Update()
 	rcHIT_pos.x = pos.x + 20;
 	rcHIT_pos.y = pos.y + 180;
 	rcHit = { (LONG)rcHIT_pos.x, (LONG)rcHIT_pos.y, (LONG)rcHit_Size.x, (LONG)rcHit_Size.y };		// 시작x, 시작y, 가로크기, 세로크기
-	rcHit_temp = { (LONG)rcHIT_pos.x, (LONG)rcHIT_pos.y, (LONG)rcHit_Size.x + (LONG)rcHIT_pos.x, (LONG)rcHit_Size.y + (LONG)rcHIT_pos.y };
+	rcHit_temp = { (LONG)rcHIT_pos.x, (LONG)rcHIT_pos.y, (LONG)rcHit_Size.x + (LONG)rcHIT_pos.x, (LONG)rcHit_Size.y + (LONG)rcHIT_pos.y};
 
 	//attack 네모
 	rcAttack = { (LONG)rcAttack_pos.x, (LONG)rcAttack_pos.y, (LONG)rcAttack_Size.x, (LONG)rcAttack_Size.y };
-	rcAttack_temp = { (LONG)rcAttack_pos.x, (LONG)rcAttack_pos.y, (LONG)rcAttack_Size.x + (LONG)rcAttack_pos.x, (LONG)rcAttack_Size.y + (LONG)rcAttack_pos.y };
+	rcAttack_temp = { (LONG)rcAttack_pos.x, (LONG)rcAttack_pos.y, (LONG)rcAttack_Size.x + (LONG)rcAttack_pos.x, (LONG)rcAttack_Size.y + (LONG)rcAttack_pos.y};
 
 	//스킬 저장 벡터
 	elapsedTime2++;

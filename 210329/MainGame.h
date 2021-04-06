@@ -22,40 +22,41 @@ private:
 
 	FPOINT backPos;
 
+	//배경 변수
 	Image* backBuffer;
 	Image* backGround;
-
-	int character_1P;	//0: 쿄 1: 이오리 3: 김갑환
-	int character_2P;
-	int character_1P_posX, character_2P_posX;
-	int character_1P_backR, character_1P_backL;
+	int character_1P_backR, character_1P_backL;			
 	int character_2P_backR, character_2P_backL;
-
+	
+	//hp 조절 변수
+	int character_1P_HP, character_2P_HP;								//1P 2P HP
+	int character_1P_AttackValue, character_2P_AttackValue;				//1P 2P AttackValue
+	int elapsedTime;
+	
+	//캐릭터 변수
 	Kyo_1P* kyo1P;
 	Kyo_2P* kyo2P;
-
 	Iori_1P* iori1P;
 	Iori_2P* iori2P;
-
 	KimKaphwan_1P* kim1P;
 	KimKaphwan_2P* kim2P;
+	int character_1P, character_2P;										//0: 쿄 1: 이오리 3: 김갑환
+	int character_1P_posX, character_2P_posX;							//1P 2P (x)위치
 
+	//충돌관련 변수
 	RECT RectHit_1P;
 	RECT RectAttack_1P;
-
 	RECT RectHit_2P;
 	RECT RectAttack_2P;
-	
 	RECT rcTemp1;	//교차 영역을 저장할 RECT
 	RECT rcTemp2;
-
 	const char* whoHitted;
 	const char* whoAttack;
-	char szText[100];
-	char szText1[100];
 
 public:
 	HRESULT Init();
+	void Manager1P();
+	void Manager2P();
 	void Update();
 	void Release();
 	void Render(HDC hdc);

@@ -39,12 +39,18 @@ public:
 	int storeLast;			//벡터 마지막 스킬 저장
 	bool checkCombo;		//콤보 발생 여부
 
+	//타격 피격
+	RECT rcHit;				//피격
+	RECT rcAttack;			//타격
+
 	bool moveback_R;
 	bool moveback_L;
 
 public:
 	HRESULT Init();
 	void Motion2P();		//← → J L U O
+	void ComboBox();
+	void HitBox();
 	void FrameCheck();
 	void Update();
 	void Render(HDC hdc);
@@ -56,5 +62,12 @@ public:
 	inline void setBackMove_R(bool b) { this->moveback_R = b; }
 	inline int getBackMove_L() { return moveback_L; }
 	inline void setBackMove_L(bool b) { this->moveback_L = b; }
+
+	inline int getAttackValue() { return attackValue; }
+	inline int getHP() { return hp; }
+	inline void setHP(int enemyAttackValue) { this->hp -= enemyAttackValue; }
+
+	inline RECT getRcHit() { return rcHit; }
+	inline RECT getRcAttack() { return rcAttack; }
 };
 
