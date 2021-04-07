@@ -155,6 +155,7 @@ void CharacterPick::Render(HDC hdc)
 	wsprintf(text2P, "2P %s", nameCheck[curSmall_2P]);
 	TextOut(hBack, 970, 10, text2P, strlen(text2P));
 
+	//큰 캐릭터 창
 	if (big_1p)
 	{
 		big_1p[curSmall_1P].Render(hBack, 100, 50);

@@ -73,9 +73,23 @@ HRESULT KimKaphwan_1P::Init()
 	}
 
 	down = new Image();
-	if (FAILED(down->Init("Image/kimkap_fall.bmp", 5838, 660, 46, 1, true, RGB(255, 255, 255))))
+	if (FAILED(down->Init("Image/kimkap_fall.bmp", 1251 * 3, 660, 9, 1, true, RGB(255, 255, 255))))
 	{
 		MessageBox(g_hWnd, "김갑환 로드 실패", "경고", MB_OK);
+		return E_FAIL;
+	}
+
+	kim_win = new Image();
+	if (FAILED(kim_win->Init("Image/kim_1P_win.bmp", WINSIZE_X, WINSIZE_Y, 1, 1, true, RGB(255, 255, 255))))
+	{
+		MessageBox(g_hWnd, "윈 로드 실패", "경고", MB_OK);
+		return E_FAIL;
+	}
+
+	kim_bar_1P = new Image();
+	if (FAILED(kim_bar_1P->Init("Image/kim_1P_selected.bmp", WINSIZE_X, WINSIZE_Y, 1, 1, true, RGB(255, 255, 255))))
+	{
+		MessageBox(g_hWnd, "미니 캐릭 로드 실패", "경고", MB_OK);
 		return E_FAIL;
 	}
 
@@ -94,6 +108,9 @@ HRESULT KimKaphwan_1P::Init()
 
 	moveback_R = false;
 	moveback_L = false;
+
+	//
+	isOnce = true;
 
 	return S_OK;
 }
@@ -155,7 +172,7 @@ void KimKaphwan_1P::Motion1P()
 			rcHit.left -= 3;
 			rcHit.right -= 3;
 		}
-		if (pos.x < 0 + 150)
+		if (pos.x < 0 + 300)
 			moveback_L = true;
 	}
 	if (KeyManager::GetSingleton()->IsOnceKeyUp('V') && canInput)
@@ -347,7 +364,19 @@ void KimKaphwan_1P::FrameCheck()
 
 void KimKaphwan_1P::Update()
 {
-	//스킬 저장 벡터
+	//게임 종료 다운
+	if (hp <= 0)
+	{
+		canInput = false;
+		kimState = State::DOWN;
+		if (isOnce)
+		{
+			frameCount = 0;
+			isOnce = false;
+		}
+	}
+
+	//스킬 저장 벡터(1)
 	elapsedTime2++;
 	if (elapsedTime2 >= 9 * 10)	//프레임 업데이트가 10번 일어나면 벡터를 지워준다
 	{
@@ -384,7 +413,7 @@ void KimKaphwan_1P::Update()
 			}
 		}
 	}
-
+	//스킬 저장 벡터(2)
 	elapsedTime3++;
 	if (elapsedTime3 >= 9 * 18)
 	{
@@ -426,9 +455,19 @@ void KimKaphwan_1P::Update()
 			rcAttack = { 0, 0, 0, 0 };
 		}
 	}
-	else
+	else if (kimState == State::STAND || kimState == State::FRONT || kimState == State::BACK)
 	{
 		FrameCheck();
+	}
+	else //kimState == State::DOWN
+	{
+		elapsedTime++;
+		if (elapsedTime >= 9)
+		{
+			if (frameCount < 9)	//down 프레임 넣어주기
+				frameCount++;
+			elapsedTime = 0;
+		}
 	}
 }
 
@@ -445,6 +484,9 @@ void KimKaphwan_1P::Render(HDC hdc)
 			TextOut(hdc, 10, 20 * (i + 1), szText, strlen(szText));
 		}
 	}
+
+	//hp 미니 캐릭터
+	kim_bar_1P->Render(hdc, 0, 0, 0);
 
 	//모션 렌더
 	if (kim_SidePosition == 1)
@@ -481,6 +523,9 @@ void KimKaphwan_1P::Render(HDC hdc)
 		case State::DOWN:
 			down->Render(hdc, pos.x, pos.y, frameCount);
 			break;
+		case State::WIN:
+			kim_win->Render(hdc, 0, 0, 0);
+			break;
 		}
 	}
 	else if (kim_SidePosition == 2)
@@ -516,6 +561,9 @@ void KimKaphwan_1P::Render(HDC hdc)
 			break;
 		case State::DOWN:
 			down->RenderFlip(hdc, pos.x, pos.y, frameCount);
+			break;
+		case State::WIN:
+			kim_win->Render(hdc, 0, 0, 0);
 			break;
 		}
 	}

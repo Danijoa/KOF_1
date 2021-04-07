@@ -67,7 +67,7 @@ HRESULT Kyo_1P::Init()
 		MessageBox(g_hWnd, "콤보 로드 실패", "경고", MB_OK);
 		return E_FAIL;
 	}
-
+	
 	imageSize[(int)State::WHAND] = 630 * 3 / 5;
 	kyo_yakson = new Image();
 	if (FAILED(kyo_yakson->Init("Image/kyo_yakson.bmp", 630 * 3, imageSizeY, 5, 1, true, RGB(255, 255, 255))))
@@ -86,9 +86,23 @@ HRESULT Kyo_1P::Init()
 
 	imageSize[(int)State::DOWN] = 3189 * 3 / 17;
 	kyo_hitted = new Image();
-	if (FAILED(kyo_hitted->Init("Image/kyo_hitted.bmp", 3189 * 3, imageSizeY, 17, 1, true, RGB(255, 255, 255))))
+	if (FAILED(kyo_hitted->Init("Image/kyo_hitted.bmp", 1488 * 3, imageSizeY, 8, 1, true, RGB(255, 255, 255))))
 	{
 		MessageBox(g_hWnd, "힛 로드 실패", "경고", MB_OK);
+		return E_FAIL;
+	}
+
+	kyo_win = new Image();
+	if (FAILED(kyo_win->Init("Image/kyo_1P_win.bmp", WINSIZE_X, WINSIZE_Y, 1, 1, true, RGB(255, 255, 255))))
+	{
+		MessageBox(g_hWnd, "윈 로드 실패", "경고", MB_OK);
+		return E_FAIL;
+	}
+
+	kyo_bar_1P = new Image();
+	if (FAILED(kyo_bar_1P->Init("Image/kyo_1P_selected.bmp", WINSIZE_X, WINSIZE_Y, 1, 1, true, RGB(255, 255, 255))))
+	{
+		MessageBox(g_hWnd, "미니 캐릭 로드 실패", "경고", MB_OK);
 		return E_FAIL;
 	}
 
@@ -115,6 +129,9 @@ HRESULT Kyo_1P::Init()
 
 	moveback_R = false;
 	moveback_L = false;
+
+	///
+	isOnce = true;
 
 	return S_OK;
 }
@@ -428,6 +445,18 @@ void Kyo_1P::FrameCheck()
 
 void Kyo_1P::Update()
 {
+	//게임 종료 다운
+	if (hp <= 0)
+	{
+		canInput = false;
+		kyoState = State::DOWN;
+		if (isOnce)
+		{
+			frameCount = 0;
+			isOnce = false;
+		}
+	}
+
 	//hit 네모
 	rcHIT_pos.x = pos.x + 20;
 	rcHIT_pos.y = pos.y + 180;
@@ -438,7 +467,7 @@ void Kyo_1P::Update()
 	rcAttack = { (LONG)rcAttack_pos.x, (LONG)rcAttack_pos.y, (LONG)rcAttack_Size.x, (LONG)rcAttack_Size.y };
 	rcAttack_temp = { (LONG)rcAttack_pos.x, (LONG)rcAttack_pos.y, (LONG)rcAttack_Size.x + (LONG)rcAttack_pos.x, (LONG)rcAttack_Size.y + (LONG)rcAttack_pos.y };
 	
-	//스킬 저장 벡터
+	//스킬 저장 벡터(1)
 	elapsedTime2++;
 	if (elapsedTime2 >= 9 * 10)	//프레임 업데이트가 10번 일어나면 벡터를 지워준다
 	{
@@ -475,7 +504,7 @@ void Kyo_1P::Update()
 			}
 		}
 	}
-
+	//스킬 저장 벡터(1)
 	elapsedTime3++;
 	if (elapsedTime3 >= 9 * 18)
 	{
@@ -502,9 +531,19 @@ void Kyo_1P::Update()
 
 		}
 	}
-	else
+	else if (kyoState == State::STAND || kyoState == State::FRONT || kyoState == State::BACK)
 	{
 		FrameCheck();
+	}
+	else //kyoState == State::DOWN
+	{
+		elapsedTime++;
+		if (elapsedTime >= 9)
+		{
+			if (frameCount < 7)	//0~7frame
+				frameCount++;
+			elapsedTime = 0;
+		}
 	}
 }
 
@@ -527,6 +566,9 @@ void Kyo_1P::Render(HDC hdc)
 
 	//attack 네모
 	RenderRect(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
+
+	//hpbar
+	kyo_bar_1P->Render(hdc, 0, 0, 0);
 
 	//모션 렌더
 	if (kyo_SidePosition == 1)	//1p가 오른쪽을 바라보는 경우
@@ -560,6 +602,9 @@ void Kyo_1P::Render(HDC hdc)
 		case State::DOWN:
 			kyo_hitted->Render(hdc, pos.x, pos.y, frameCount);
 			break;
+		case State::WIN:
+			kyo_win->Render(hdc, 0, 0, 0);
+			break;
 		}
 	}
 	else if (kyo_SidePosition == 2)	//1p가 왼쪽을 바라보는 경우
@@ -592,6 +637,9 @@ void Kyo_1P::Render(HDC hdc)
 			break;
 		case State::DOWN:
 			kyo_hitted->RenderFlip(hdc, pos.x, pos.y, frameCount);
+			break;
+		case State::WIN:
+			kyo_win->Render(hdc, 0, 0, 0);
 			break;
 		}
 	}

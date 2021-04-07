@@ -29,7 +29,7 @@ private:
 
 	char text1P[100], text2P[100];		//1p 2p 확인용 TEXT 담을 곳
 	const char* nameCheck[3];			//이름 저장 해 두는 곳 (char, char*, const char 어렵다... ...)
-	bool curPick;						//1P 2P 차례 검사
+	bool curPick;						//현재 1P 2P가 가리리고 있는 위치 검사
 	int curSmall_1P,  curSmall_2P;		//작은창 몇번째 캐릭터 가리키고 있는지
 
 	bool nextScene;

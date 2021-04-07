@@ -6,7 +6,7 @@ class Image;
 class KimKaphwan_1P : public KOF_Character
 {
 public:
-	enum class State { STAND, FRONT, BACK, WHAND, SHAND, WFOOT, SFOOT, COMBO, DOWN };
+	enum class State { STAND, FRONT, BACK, WHAND, SHAND, WFOOT, SFOOT, COMBO, DOWN, WIN };
 private:
 	const char* name;
 	FPOINT pos;
@@ -29,6 +29,9 @@ private:
 	Image* sFoot;
 	Image* down;
 	Image* combo;
+	//////////////
+	Image* kim_win;
+	Image* kim_bar_1P;
 
 	bool canInput;
 
@@ -45,6 +48,9 @@ private:
 
 	bool moveback_R;
 	bool moveback_L;
+
+	//////////////////////
+	bool isOnce;
 
 public:
 	HRESULT Init();
@@ -69,5 +75,8 @@ public:
 
 	inline RECT getRcHit() { return rcHit; }
 	inline RECT getRcAttack() { return rcAttack; }
+
+	//////////////////
+	inline void setWin() { this->kimState = State::WIN; }
 };
 

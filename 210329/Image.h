@@ -78,6 +78,9 @@ public:
 	//애니메이션 좌우 반전 출력
 	void RenderFlip(HDC hdc, int destX, int destY, int frameIndex);
 
+	//바 출력
+	void RenderBar(HDC hdc, int winX, int winY, int width, int height);
+
 	void Release();
 
 	//get set
@@ -88,7 +91,7 @@ public:
 		return NULL;
 	};
 
-	///////////// 추가부분 - 충돌 ////////////
+	//이오리 충돌시 사용(가로 길이 & 프레임 수)
 	inline IMAGE_INFO* GetImageInfo() { return this->imageInfo; }
 };
 

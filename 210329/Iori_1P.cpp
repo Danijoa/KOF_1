@@ -75,6 +75,20 @@ HRESULT Iori_1P::Init()
 		return E_FAIL;
 	}
 
+	iori_win = new Image();
+	if (FAILED(iori_win->Init("Image/iori_1P_win.bmp", WINSIZE_X, WINSIZE_Y, 1, 1, true, RGB(255, 255, 255))))
+	{
+		MessageBox(g_hWnd, "윈 로드 실패", "경고", MB_OK);
+		return E_FAIL;
+	}
+
+	iori_bar_1P = new Image();
+	if (FAILED(iori_bar_1P->Init("Image/iori_1P_selected.bmp", WINSIZE_X, WINSIZE_Y, 1, 1, true, RGB(255, 255, 255))))
+	{
+		MessageBox(g_hWnd, "미니 캐릭 로드 실패", "경고", MB_OK);
+		return E_FAIL;
+	}
+
 	canInput = true;
 	comboStore = new int[3];
 	comboStore[0] = 'Q';
@@ -85,13 +99,16 @@ HRESULT Iori_1P::Init()
 	storeLast = 0 - '0';
 	checkCombo = false;
 
+	//배경
 	moveback_R = false;
 	moveback_L = false;
 
-	///////////// 추가 부분 - 충돌 /////////////////
+	//충돌
 	rcHit = { 0, 0, 0, 0 };
 	rcAttack = { 0,0,0,0 };
 
+	//
+	isOnce = true;
 
 	return S_OK;
 }
@@ -146,7 +163,7 @@ void Iori_1P::Motion1P()
 		}
 		if (pos.x > 0 + 10)
 			pos.x -= 3;
-		if (pos.x < 0 + 150)
+		if (pos.x < 300)
 			moveback_L = true;
 	}
 	if (KeyManager::GetSingleton()->IsOnceKeyUp('V') && canInput)
@@ -237,6 +254,18 @@ void Iori_1P::FrameCheck()
 
 void Iori_1P::Update()
 {
+	//게임 종료 다운
+	if (hp <= 0)
+	{
+		canInput = false;
+		ioriState = Chractor_STATE::DOWN;
+		if (isOnce)
+		{
+			frameCount = 0;
+			isOnce = false;
+		}
+	}
+
 	//스킬 저장 벡터
 	elapsedTime2++;
 	if (elapsedTime2 >= 9 * 10)	//프레임 업데이트가 10번 일어나면 벡터를 지워준다
@@ -299,14 +328,24 @@ void Iori_1P::Update()
 			canInput = true;
 		}
 	}
-	else
+	else if (ioriState == Chractor_STATE::STAND || ioriState == Chractor_STATE::FRONT || ioriState == Chractor_STATE::BACK)
 	{
 		FrameCheck();
 	}
-	///////////// 추가 부분 - 충돌 /////////////////
+	else //ioriState == Chractor_STATE::DOWN
+	{
+		elapsedTime++;
+		if (elapsedTime >= 9)
+		{
+			if (frameCount < 16)	//down 부분 프레임 수 넣어주기
+				frameCount++;
+			elapsedTime = 0;
+		}
+	}
+
+	//충돌
 	Iori_Set_HitBox(frameCount);
 	Iori_Set_AttackBox(frameCount);
-
 }
 
 void Iori_1P::Render(HDC hdc)
@@ -322,6 +361,9 @@ void Iori_1P::Render(HDC hdc)
 			TextOut(hdc, 10, 20 * (i + 1), szText, strlen(szText));
 		}
 	}
+
+	//hp 옆 미니 캐릭터
+	iori_bar_1P->Render(hdc, 0, 0, 0);
 
 	//모션 렌더
 	if (iori_SidePosition == 1)
@@ -385,6 +427,11 @@ void Iori_1P::Render(HDC hdc)
 			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
 			img[8].Render(hdc, pos.x, pos.y, frameCount);
 		}
+		
+		if (ioriState == Chractor_STATE::WIN)
+		{
+			iori_win->Render(hdc, 0, 0, 0);
+		}
 	}
 
 	if (iori_SidePosition == 2)
@@ -447,10 +494,12 @@ void Iori_1P::Render(HDC hdc)
 			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
 			img[8].RenderFlip(hdc, pos.x - img[8].GetImageInfo()->frameWidth + 280, pos.y, frameCount);
 		}
+
+		if (ioriState == Chractor_STATE::WIN)
+		{
+			iori_win->Render(hdc, 0, 0, 0);
+		}
 	}
-
-
-
 }
 
 void Iori_1P::Iori_Set_HitBox(int frameCount)
@@ -1129,8 +1178,6 @@ void Iori_1P::Release()
 		}
 		delete[] img;
 		img = nullptr;
-
-
 	}
 }
 

@@ -6,7 +6,7 @@ class Image;
 class Kyo_1P : public KOF_Character
 {
 public:
-	enum class State { STAND, FRONT, BACK, WHAND, SHAND, WFOOT, SFOOT, COMBO, DOWN };
+	enum class State { STAND, FRONT, BACK, WHAND, SHAND, WFOOT, SFOOT, COMBO, DOWN, WIN};
 private:
 	const char* name;
 	FPOINT pos;			
@@ -32,7 +32,10 @@ private:
 	Image* kyo_yakson;		//A
 	Image* kyo_yakbal;		//D
 	Image* kyo_hitted;
+	Image* kyo_win;
+	Image* kyo_bar_1P;
 
+	//충돌 박스
 	FPOINT rcHIT_pos;
 	FPOINT rcHit_Size;
 	RECT rcHit;
@@ -42,6 +45,7 @@ private:
 	RECT rcAttack;
 	RECT rcAttack_temp;
 
+	//키 입력 제어
 	bool canInput;			//다음 액션으로 넘어 갈 수  있는지
 
 	//콤보 관련 변수
@@ -52,8 +56,12 @@ private:
 	int storeLast;			//벡터 마지막 스킬 저장
 	bool checkCombo;		//콤보 발생 여부
 
+	//배경
 	bool moveback_R;
 	bool moveback_L;
+
+	//down 상태 일때 사용
+	bool isOnce;
 
 public:
 	HRESULT Init();
@@ -64,20 +72,25 @@ public:
 	void Render(HDC hdc);
 	void Release();
 
+	//위치
 	inline int getPosX() { return pos.x; }
 	inline void setSidePos(int sidePos) { this->kyo_SidePosition = sidePos; }
 
+	//배경
 	inline int getBackMove_R() { return moveback_R; }
 	inline void setBackMove_R(bool b) { this->moveback_R = b; }
 	inline int getBackMove_L() { return moveback_L; }
 	inline void setBackMove_L(bool b) { this->moveback_L = b; }
 
+	//hp
 	inline int getAttackValue() { return attackValue; }
 	inline int getHP() { return hp; }
 	inline void setHP(int enemyAttackValue) { this->hp -= enemyAttackValue; }
 
-	//inline RECT getRcHit() { return rcHit; }
-	//inline RECT getRcAttack() { return rcAttack; }
+	//충돌
 	inline RECT getRcHit() { return rcHit_temp; }
 	inline RECT getRcAttack() { return rcAttack_temp; }
+
+	//우승 상태로 변경
+	inline void setWin() { this->kyoState = State::WIN; }
 };

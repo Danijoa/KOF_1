@@ -118,6 +118,7 @@ void Image::Release()
 	}
 }
 
+//윈도우 상 x,y 좌표
 void Image::Render(HDC hdc, int winX, int winY)
 {
 	if (isTransparent == true)	//특정(마젠타) 색을 빼고 싶을 때, 해당 색상을 빼고 복사하는 함수
@@ -146,6 +147,7 @@ void Image::Render(HDC hdc, int winX, int winY)
 	}
 }
 
+//윈도우 상 x,y 좌표 / 프레임인덱스
 void Image::Render(HDC hdc, int winX, int winY, int frame)
 {
 	imageInfo->curFrameX = frame;
@@ -217,4 +219,17 @@ void Image::RenderFlip(HDC hdc, int destX, int destY, int frameIndex)
 			SRCCOPY
 		);
 	}
+}
+
+//바 출력
+void Image::RenderBar(HDC hdc, int winX, int winY, int width, int height)
+{
+	BitBlt(
+		hdc,
+		winX, winY,
+		width, height,
+		imageInfo->hMemDC,
+		0, 0,
+		SRCCOPY
+	);
 }

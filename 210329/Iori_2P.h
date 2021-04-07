@@ -7,7 +7,7 @@ class Image;
 class Iori_2P : public KOF_Character
 {
 public:
-	enum class Chractor_STATE { FRONT, BACK, STAND, WHAND, SHAND, WFOOT, SFOOT, COMBO, DOWN };
+	enum class Chractor_STATE { FRONT, BACK, STAND, WHAND, SHAND, WFOOT, SFOOT, COMBO, DOWN, WIN };
 
 private:
 	const char* name;
@@ -24,6 +24,9 @@ private:
 	int iori_SidePosition;
 	//9개 이미지
 	Image* img;
+	/////////////////
+	Image* iori_win;
+	Image* iori_bar_2P;
 
 	bool canInput;			//다음 액션으로 넘어 갈 수  있는지
 
@@ -42,7 +45,8 @@ private:
 	RECT rcHit;
 	RECT rcAttack;
 
-
+	//////////////////////
+	bool isOnce;
 
 public:
 
@@ -70,6 +74,9 @@ public:
 
 	inline RECT getRcHit() { return rcHit; }
 	inline RECT getRcAttack() { return rcAttack; }
+
+	//////////////////
+	inline void setWin() { this->ioriState = Chractor_STATE::WIN; }
 
 	Iori_2P();
 	~Iori_2P();
