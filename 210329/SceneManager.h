@@ -12,11 +12,11 @@ public:
 private:
 	//bool isInited;
 
-	HANDLE hTimer;
-	Scene currentScene;
-	Opening g_opening;
-	MainGame g_mainGame;
-	CharacterPick g_characterpick;
+	HANDLE hTimer;					
+	Scene currentScene;				//현재_씬 기억하는 공간
+	Opening g_opening;				//오프닝_씬
+	CharacterPick g_characterpick;	//캐릭터픽_씬
+	MainGame g_mainGame;			//배틀_씬
 
 public:
 	HRESULT Init();			// 멤버 변수의 초기화, 메모리 할당

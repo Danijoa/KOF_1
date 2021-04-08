@@ -9,17 +9,17 @@ HRESULT Iori_2P::Init()
 
 	name = "Iori";
 	pos.x = 800;
-	pos.y = 250+20;
+	pos.y = 250 + 20;
 	hp = 100;
 
-	chracterFrame = 7;
+	chracterFrame = 27;
 	frameCount = 0;
 	elapsedTime = 0;	//윈도우 프레임 100이 될 때마다 애니메이션 프레임 1씩 증가
 	attackValue = 10;
 
-	ioriState = Chractor_STATE::STAND;
+	ioriState = Chractor_STATE::INIT;
 
-	stateCount = 9;
+	stateCount = 11;
 	img = new Image[stateCount];
 
 	if (FAILED(img[0].Init("Image/iori_walk_front.bmp", 1020 * 3, 138 * 3, 12, 1, TRUE, RGB(255, 255, 255))))
@@ -76,6 +76,18 @@ HRESULT Iori_2P::Init()
 		return E_FAIL;
 	}
 
+	if (FAILED(img[9].Init("Image/iori_hit.bmp", 1278 * 3, 138 * 3, 9, 1, TRUE, RGB(255, 255, 255))))
+	{
+		MessageBox(g_hWnd, "Image/iori_hit.bmp 로드 실패", "경고", MB_OK);
+		return E_FAIL;
+	}
+
+	if (FAILED(img[10].Init("Image/iori_init.bmp", 2835 * 3, 138 * 3, 27, 1, TRUE, RGB(255, 255, 255))))
+	{
+		MessageBox(g_hWnd, "Image/iori_init.bmp 로드 실패", "경고", MB_OK);
+		return E_FAIL;
+	}
+
 	iori_win = new Image();
 	if (FAILED(iori_win->Init("Image/iori_2P_win.bmp", WINSIZE_X, WINSIZE_Y, 1, 1, true, RGB(255, 255, 255))))
 	{
@@ -84,13 +96,13 @@ HRESULT Iori_2P::Init()
 	}
 
 	iori_bar_2P = new Image();
-	if (FAILED(iori_bar_2P->Init("Image/iori_2P_selected.bmp", WINSIZE_X, WINSIZE_Y, 1, 1, true, RGB(255, 255, 255))))
+	if (FAILED(iori_bar_2P->Init("Image/iori_2P_selected.bmp", WINSIZE_X, WINSIZE_Y, 1, 1, true, RGB(0, 0, 0))))
 	{
 		MessageBox(g_hWnd, "미니 캐릭 로드 실패", "경고", MB_OK);
 		return E_FAIL;
 	}
 
-	canInput = true;
+	canInput = false;
 	comboStore = new int[3];
 	comboStore[0] = 'U';
 	comboStore[1] = 'U';
@@ -104,6 +116,9 @@ HRESULT Iori_2P::Init()
 	moveback_L = false;
 
 	isOnce = true;
+
+	hitCheck = false;
+	isOnceHit = false;
 
 	return S_OK;
 }
@@ -205,6 +220,19 @@ void Iori_2P::Motion2P()
 		chracterFrame = 19 + 1;
 		frameCount = 0;
 		checkCombo = false;
+	}
+
+	//맞음
+	if (hitCheck)
+	{
+		if (hp > 0)
+		{
+			canInput = true;
+			ioriState = Chractor_STATE::HIT;
+			chracterFrame = 9 + 1;
+			frameCount = 0;
+			isOnceHit = true;
+		}
 	}
 
 	//약손
@@ -311,7 +339,7 @@ void Iori_2P::Update()
 
 	//프레임 변경
 	if (!canInput && (ioriState == Chractor_STATE::SHAND || ioriState == Chractor_STATE::SFOOT || ioriState == Chractor_STATE::COMBO
-		|| ioriState == Chractor_STATE::WFOOT || ioriState == Chractor_STATE::WHAND))
+		|| ioriState == Chractor_STATE::WFOOT || ioriState == Chractor_STATE::WHAND || ioriState == Chractor_STATE::INIT))
 	{
 		FrameCheck();
 
@@ -323,6 +351,19 @@ void Iori_2P::Update()
 			canInput = true;
 		}
 	}
+
+	else if (isOnceHit && ioriState == Chractor_STATE::HIT) //맞았을때
+	{
+		FrameCheck();
+		if (frameCount + 1 == chracterFrame)
+		{
+			ioriState = Chractor_STATE::STAND;
+			chracterFrame = 7;
+			frameCount = 0;
+			isOnceHit = false;
+		}
+	}
+
 	else if (ioriState == Chractor_STATE::STAND || ioriState == Chractor_STATE::FRONT || ioriState == Chractor_STATE::BACK)
 	{
 		FrameCheck();
@@ -345,17 +386,17 @@ void Iori_2P::Update()
 
 void Iori_2P::Render(HDC hdc)
 {
-	char szText[100];
-	wsprintf(szText, "myV[마지막] : %c", storeLast);
-	TextOut(hdc, 900, 2, szText, strlen(szText));
-	if (!myV.empty())
-	{
-		for (int i = 0; i < myV.size(); i++)	//벡터 안에 있는 값 확인 용 코드
-		{
-			wsprintf(szText, "myV[ %d ] : %c", i, myV[i]);
-			TextOut(hdc, 900, 20 * (i + 1), szText, strlen(szText));
-		}
-	}
+	//char szText[100];
+	//wsprintf(szText, "myV[마지막] : %c", storeLast);
+	//TextOut(hdc, 900, 2, szText, strlen(szText));
+	//if (!myV.empty())
+	//{
+	//	for (int i = 0; i < myV.size(); i++)	//벡터 안에 있는 값 확인 용 코드
+	//	{
+	//		wsprintf(szText, "myV[ %d ] : %c", i, myV[i]);
+	//		TextOut(hdc, 900, 20 * (i + 1), szText, strlen(szText));
+	//	}
+	//}
 
 	//hpbar
 	iori_bar_2P->Render(hdc, 0, 0, 0);
@@ -365,62 +406,67 @@ void Iori_2P::Render(HDC hdc)
 	{
 		if (ioriState == Chractor_STATE::FRONT)
 		{
-			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			//Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
 			img[0].Render(hdc, pos.x, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::BACK)
 		{
-			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			//Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
 			img[1].Render(hdc, pos.x, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::STAND)
 		{
-			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			//Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
 			img[2].Render(hdc, pos.x, pos.y, frameCount);
 
 		}
 
 		if (ioriState == Chractor_STATE::WHAND)
 		{
-			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
-			Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
+			//Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			//Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
 			img[3].Render(hdc, pos.x, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::SHAND)
 		{
-			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
-			Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
+			//Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			//Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
 			img[4].Render(hdc, pos.x, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::WFOOT)
 		{
-			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
-			Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
+			//Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			//Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
 			img[5].Render(hdc, pos.x, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::SFOOT)
 		{
-			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
-			Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
+			//Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			//Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
 			img[6].Render(hdc, pos.x, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::COMBO)
 		{
-			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
-			Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
+			//Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			//Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
 			img[7].Render(hdc, pos.x, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::DOWN)
 		{
-			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			//Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
 			img[8].Render(hdc, pos.x, pos.y, frameCount);
+		}
+
+		if (ioriState == Chractor_STATE::HIT)
+		{
+			img[9].Render(hdc, pos.x, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::WIN)
@@ -433,61 +479,71 @@ void Iori_2P::Render(HDC hdc)
 	{
 		if (ioriState == Chractor_STATE::FRONT)
 		{
-			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			//Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
 			img[0].RenderFlip(hdc, pos.x - img[0].GetImageInfo()->frameWidth + 280, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::BACK)
 		{
-			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			//Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
 			img[1].RenderFlip(hdc, pos.x - img[1].GetImageInfo()->frameWidth + 280, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::STAND)
 		{
-			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			//Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
 			img[2].RenderFlip(hdc, pos.x - img[2].GetImageInfo()->frameWidth + 280, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::WHAND)
 		{
-			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
-			Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
+			//Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			//Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
 			img[3].RenderFlip(hdc, pos.x - img[3].GetImageInfo()->frameWidth + 280, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::SHAND)
 		{
-			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
-			Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
+			//Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			//Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
 			img[4].RenderFlip(hdc, pos.x - img[4].GetImageInfo()->frameWidth + 280, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::WFOOT)
 		{
-			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
-			Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
+			//Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			//Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
 			img[5].RenderFlip(hdc, pos.x - img[5].GetImageInfo()->frameWidth + 280, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::SFOOT)
 		{
-			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
-			Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
+			//Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			//Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
 			img[6].RenderFlip(hdc, pos.x - img[6].GetImageInfo()->frameWidth + 280, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::COMBO)
 		{
-			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
-			Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
+			//Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			//Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
 			img[7].RenderFlip(hdc, pos.x - img[7].GetImageInfo()->frameWidth + 280, pos.y, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::DOWN)
 		{
-			Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+			//Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
 			img[8].RenderFlip(hdc, pos.x - img[8].GetImageInfo()->frameWidth + 280, pos.y, frameCount);
+		}
+
+		if (ioriState == Chractor_STATE::HIT)
+		{
+			img[9].RenderFlip(hdc, pos.x, pos.y, frameCount);
+		}
+
+		if (ioriState == Chractor_STATE::INIT)
+		{
+			img[10].RenderFlip(hdc, pos.x, pos.y + 10, frameCount);
 		}
 
 		if (ioriState == Chractor_STATE::WIN)

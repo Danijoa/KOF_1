@@ -12,7 +12,8 @@ HRESULT KimKaphwan_2P::Init()
 	pos.y = 30;
 	hp = 100;
 
-	characterFrame = 11;
+	kimState = State::INIT;
+	characterFrame = 27;
 	frameCount = 0;
 	elapsedTime = 0;
 	attackValue = 10;
@@ -80,6 +81,20 @@ HRESULT KimKaphwan_2P::Init()
 		return E_FAIL;
 	}
 
+	hit = new Image();
+	if (FAILED(hit->Init("Image/kimkap_hit.bmp", 1251, 660, 3, 1, true, RGB(255, 255, 255))))
+	{
+		MessageBox(g_hWnd, "김갑환 로드 실패", "경고", MB_OK);
+		return E_FAIL;
+	}
+
+	init = new Image();
+	if (FAILED(init->Init("Image/kimkap-init.bmp", 3016 * 3, 660, 26, 1, true, RGB(255, 255, 255))))
+	{
+		MessageBox(g_hWnd, "김갑환 로드 실패", "경고", MB_OK);
+		return E_FAIL;
+	}
+
 	kim_win = new Image();
 	if (FAILED(kim_win->Init("Image/kim_2P_win.bmp", WINSIZE_X, WINSIZE_Y, 1, 1, true, RGB(255, 255, 255))))
 	{
@@ -88,13 +103,13 @@ HRESULT KimKaphwan_2P::Init()
 	}
 
 	kim_bar_2P = new Image();
-	if (FAILED(kim_bar_2P->Init("Image/kim_2P_selected.bmp", WINSIZE_X, WINSIZE_Y, 1, 1, true, RGB(255, 255, 255))))
+	if (FAILED(kim_bar_2P->Init("Image/kim_2P_selected.bmp", WINSIZE_X, WINSIZE_Y, 1, 1, true, RGB(0, 0, 0))))
 	{
 		MessageBox(g_hWnd, "미니 캐릭 로드 실패", "경고", MB_OK);
 		return E_FAIL;
 	}
 
-	canInput = true;
+	canInput = false;
 	comboStore = new int[3];
 	comboStore[0] = 'U';
 	comboStore[1] = 'U';
@@ -109,6 +124,10 @@ HRESULT KimKaphwan_2P::Init()
 
 	//
 	isOnce = true;
+
+	//
+	hitCheck = false;
+	isOnceHit = false;
 
 	return S_OK;
 }
@@ -219,6 +238,19 @@ void KimKaphwan_2P::Motion2P()
 		characterFrame = 46 + 1;
 		frameCount = 0;
 		checkCombo = false;
+	}
+
+	//맞았을때
+	if (hitCheck)
+	{
+		if (hp > 0)
+		{
+			canInput = true;
+			kimState = State::HIT;
+			characterFrame = 3 + 1;
+			frameCount = 0;
+			isOnceHit = true;
+		}
 	}
 
 	//약손
@@ -423,7 +455,7 @@ void KimKaphwan_2P::Update()
 
 	//프레임 변경
 	if (!canInput && (kimState == State::SHAND || kimState == State::SFOOT || kimState == State::COMBO
-		|| kimState == State::WFOOT || kimState == State::WHAND))
+		|| kimState == State::WFOOT || kimState == State::WHAND || kimState == State::INIT))
 	{
 		FrameCheck();
 
@@ -451,6 +483,20 @@ void KimKaphwan_2P::Update()
 			rcAttack = { 0, 0, 0, 0 };
 		}
 	}
+
+	else if (isOnceHit && kimState == State::HIT) //맞았을때
+	{
+		FrameCheck();
+		if (frameCount + 1 == characterFrame)
+		{
+			kimState = State::STAND;
+			characterFrame = 11;
+			frameCount = 0;
+			rcAttack = { 0, 0, 0, 0 };
+			isOnceHit = false;
+		}
+	}
+
 	else if (kimState == State::STAND || kimState == State::FRONT || kimState == State::BACK)
 	{
 		FrameCheck();
@@ -469,17 +515,17 @@ void KimKaphwan_2P::Update()
 
 void KimKaphwan_2P::Render(HDC hdc)
 {
-	char szText[100];
-	wsprintf(szText, "myV[마지막] : %c", storeLast);
-	TextOut(hdc, 900, 2, szText, strlen(szText));
-	if (!myV.empty())
-	{
-		for (int i = 0; i < myV.size(); i++)	//벡터 안에 있는 값 확인 용 코드
-		{
-			wsprintf(szText, "myV[ %d ] : %c", i, myV[i]);
-			TextOut(hdc, 900, 20 * (i + 1), szText, strlen(szText));
-		}
-	}
+	//char szText[100];
+	//wsprintf(szText, "myV[마지막] : %c", storeLast);
+	//TextOut(hdc, 900, 2, szText, strlen(szText));
+	//if (!myV.empty())
+	//{
+	//	for (int i = 0; i < myV.size(); i++)	//벡터 안에 있는 값 확인 용 코드
+	//	{
+	//		wsprintf(szText, "myV[ %d ] : %c", i, myV[i]);
+	//		TextOut(hdc, 900, 20 * (i + 1), szText, strlen(szText));
+	//	}
+	//}
 
 	//hpbar
 	kim_bar_2P->Render(hdc, 0, 0, 0);
@@ -487,8 +533,8 @@ void KimKaphwan_2P::Render(HDC hdc)
 	//모션 렌더
 	if (kim_SidePosition == 1)
 	{
-		Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
-		Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
+		//Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+		//Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
 
 		switch (kimState)
 		{
@@ -516,6 +562,9 @@ void KimKaphwan_2P::Render(HDC hdc)
 		case State::WFOOT:
 			wFoot->Render(hdc, pos.x, pos.y, frameCount);
 			break;
+		case State::HIT:
+			hit->Render(hdc, pos.x - 70, pos.y, frameCount);
+			break;
 		case State::DOWN:
 			down->Render(hdc, pos.x, pos.y, frameCount);
 			break;
@@ -526,8 +575,8 @@ void KimKaphwan_2P::Render(HDC hdc)
 	}
 	else if (kim_SidePosition == 2)
 	{
-		Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
-		Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
+		//Rectangle(hdc, rcHit.left, rcHit.top, rcHit.right, rcHit.bottom);
+		//Rectangle(hdc, rcAttack.left, rcAttack.top, rcAttack.right, rcAttack.bottom);
 
 		switch (kimState)
 		{
@@ -555,8 +604,14 @@ void KimKaphwan_2P::Render(HDC hdc)
 		case State::WFOOT:
 			wFoot->RenderFlip(hdc, pos.x - 220, pos.y, frameCount);
 			break;
+		case State::HIT:
+			hit->RenderFlip(hdc, pos.x, pos.y, frameCount);
+			break;
 		case State::DOWN:
 			down->RenderFlip(hdc, pos.x, pos.y, frameCount);
+			break;
+		case State::INIT:
+			init->RenderFlip(hdc, pos.x - 60, pos.y, frameCount);
 			break;
 		case State::WIN:
 			kim_win->Render(hdc, 0, 0, 0);
@@ -621,5 +676,19 @@ void KimKaphwan_2P::Release()
 		combo->Release();
 		delete combo;
 		combo = nullptr;
+	}
+
+	if (hit)
+	{
+		hit->Release();
+		delete hit;
+		hit = nullptr;
+	}
+
+	if (init)
+	{
+		init->Release();
+		delete init;
+		init = nullptr;
 	}
 }

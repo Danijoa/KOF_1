@@ -33,17 +33,20 @@ void Opening::Update()
 
 void Opening::Release()
 {
-	KeyManager::GetSingleton()->Release();
+	//KeyManager::GetSingleton()->Release();
 
-	backBuffer->Release();
-	delete backBuffer;
-	backBuffer = nullptr;
+	if (backBuffer)
+	{
+		backBuffer->Release();
+		delete backBuffer;
+		backBuffer = nullptr;
+	}
 
 	backGround->Release();
 	delete backGround;
 	backGround = nullptr;
 
-	KillTimer(g_hWnd, 0);
+	//KillTimer(g_hWnd, 0);
 }
 
 void Opening::Render(HDC hdc)

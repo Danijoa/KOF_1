@@ -7,7 +7,7 @@ class Image;
 class Iori_2P : public KOF_Character
 {
 public:
-	enum class Chractor_STATE { FRONT, BACK, STAND, WHAND, SHAND, WFOOT, SFOOT, COMBO, DOWN, WIN };
+	enum class Chractor_STATE { FRONT, BACK, STAND, WHAND, SHAND, WFOOT, SFOOT, COMBO, HIT, DOWN, INIT, WIN };
 
 private:
 	const char* name;
@@ -48,6 +48,10 @@ private:
 	//////////////////////
 	bool isOnce;
 
+	//
+	bool hitCheck;
+	bool isOnceHit;
+
 public:
 
 	HRESULT Init();
@@ -77,6 +81,8 @@ public:
 
 	//////////////////
 	inline void setWin() { this->ioriState = Chractor_STATE::WIN; }
+
+	inline void SetHitCheck(bool hitCheck) { this->hitCheck = hitCheck; }
 
 	Iori_2P();
 	~Iori_2P();

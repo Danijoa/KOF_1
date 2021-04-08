@@ -6,7 +6,7 @@ class Image;
 class KimKaphwan_2P : public KOF_Character
 {
 public:
-	enum class State { STAND, FRONT, BACK, WHAND, SHAND, WFOOT, SFOOT, COMBO, DOWN , WIN};
+	enum class State { STAND, FRONT, BACK, WHAND, SHAND, WFOOT, SFOOT, COMBO, HIT, DOWN, INIT, WIN };
 
 	const char* name;
 	FPOINT pos;
@@ -32,6 +32,9 @@ public:
 	//////////////
 	Image* kim_win;
 	Image* kim_bar_2P;
+	//
+	Image* hit;
+	Image* init;
 
 	bool canInput;
 
@@ -51,6 +54,11 @@ public:
 
 	//////////////////////
 	bool isOnce;
+
+	//
+	bool hitCheck;
+
+	bool isOnceHit;
 
 public:
 	HRESULT Init();
@@ -78,5 +86,7 @@ public:
 
 	//////////////////
 	inline void setWin() { this->kimState = State::WIN; }
+
+	inline void SetHitCheck(bool hitCheck) { this->hitCheck = hitCheck; }
 };
 

@@ -6,7 +6,7 @@ class Image;
 class Kyo_2P : public KOF_Character
 {
 public:
-	enum class State { STAND, FRONT, BACK, WHAND, SHAND, WFOOT, SFOOT, COMBO, DOWN, WIN	};
+	enum class State { STAND, FRONT, BACK, WHAND, SHAND, WFOOT, SFOOT, COMBO, HIT, DOWN, INIT, WIN };
 private:
 	const char* name;
 	FPOINT pos;
@@ -19,11 +19,11 @@ private:
 
 	State kyoState;
 	int kyo_SidePosition;	//1p로 선택되었는지 2p로 선택 되었는지 받아와서 위치 지정(1: 왼 / 2: 오른) 
-	
+
+	//이미지 변수(다음에는 그냥 Image* kyo_image[11]; 이런식으로 하자)
 	int imageSizeY;
-	int imageSize[9];
-	//Image* kyo_image[9];
-	Image* kyo_stand;		
+	int imageSize[11];
+	Image* kyo_stand;
 	Image* kyo_walkFront;	//→
 	Image* kyo_walkBack;	//← 
 	Image* kyo_gangson;		//U
@@ -32,6 +32,8 @@ private:
 	Image* kyo_yakson;		//J
 	Image* kyo_yakbal;		//L
 	Image* kyo_hitted;
+	Image* kyo_hit;
+	Image* kyo_init;
 	Image* kyo_win;
 	Image* kyo_bar_2P;
 
@@ -63,6 +65,10 @@ private:
 	//down
 	bool isOnce;
 
+	//충돌 정보
+	bool hitCheck;
+	bool isOnceHit;
+
 public:
 	HRESULT Init();
 	void Motion2P();		//← → J L U O
@@ -90,6 +96,7 @@ public:
 	//충돌
 	inline RECT getRcHit() { return rcHit_temp; }
 	inline RECT getRcAttack() { return rcAttack_temp; }
+	inline void SetHitCheck(bool hitCheck) { this->hitCheck = hitCheck; }
 
 	//우승 상태
 	inline void setWin() { this->kyoState = State::WIN; }

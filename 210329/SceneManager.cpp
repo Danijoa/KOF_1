@@ -1,5 +1,5 @@
 #include "SceneManager.h"
-#include "MainGame.h"
+//#include "MainGame.h"
 
 HRESULT SceneManager::Init()
 {
@@ -34,10 +34,14 @@ void SceneManager::Release()
 
 void SceneManager::Update()
 {
-	if (g_opening.getNext())
+	if (g_opening.getNext())		//캐릭터 픽으로 넘어가기
+	{	
+		//g_opening.Release();
 		currentScene = Scene::Character;
-	if (g_characterpick.getNext())
+	}
+	if (g_characterpick.getNext())	//배틀씬으로 넘어가기
 	{
+		//g_characterpick.Release();
 		g_mainGame.setCharater(g_characterpick.get1P(), g_characterpick.get2P());	//1P 2P 누구인지 넘겨주기
 		currentScene = Scene::Battle;
 	}

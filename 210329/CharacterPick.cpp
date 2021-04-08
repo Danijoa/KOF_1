@@ -147,6 +147,7 @@ void CharacterPick::Render(HDC hdc)
 	if (backGround)
 		backGround->Render(hBack);
 
+	/*
 	//1P 누구인지 확인용
 	wsprintf(text1P, "1P %s", nameCheck[curSmall_1P]);
 	TextOut(hBack, 150, 10, text1P, strlen(text1P));
@@ -154,6 +155,7 @@ void CharacterPick::Render(HDC hdc)
 	//2p 누구인지 확인용
 	wsprintf(text2P, "2P %s", nameCheck[curSmall_2P]);
 	TextOut(hBack, 970, 10, text2P, strlen(text2P));
+	*/
 
 	//큰 캐릭터 창
 	if (big_1p)
